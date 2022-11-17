@@ -30,8 +30,10 @@ public class WaveManager : MonoBehaviour
         {
             roundGap -= Time.deltaTime;
         }
+        //改每轮波次的地方
         if (roundNum >= waveNum + 2)
         {
+            //必须清完怪Option.1
             if (curGhosts.Count <= 0) 
             {
                 if (roundGap > 1.5f) 
@@ -42,6 +44,13 @@ public class WaveManager : MonoBehaviour
                 waveNum += 1;
                 curGhosts.Clear();
             }
+            //直接进下一轮Option.2
+            //if (roundGap <= 0) 
+            //{
+            //    roundNum = 0;
+            //    waveNum += 1;
+            //    curGhosts.Clear();
+            //}
         }
         else 
         {
@@ -69,6 +78,7 @@ public class WaveManager : MonoBehaviour
     }
     void GhostSpawn(int wave, int round) 
     {
+        //改怪物生成数量的地方
         for (int i = 0; i < 2 + (wave - 1) + round; i++) 
         {
             GhostManager spawnedGhost = Instantiate(ghost, transform);

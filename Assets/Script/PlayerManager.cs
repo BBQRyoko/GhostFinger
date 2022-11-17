@@ -101,6 +101,7 @@ public class PlayerManager : MonoBehaviour
     }
     public void LevelManager() 
     {
+        //改经验值的地方
         requiredExp = 5 + curLevel;
         if (curExp >= requiredExp) 
         {
