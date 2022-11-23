@@ -150,8 +150,6 @@ public class PlayerManager : MonoBehaviour
     {
         mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         fingerObject.transform.position = mousePos;
-        fingerDirection = (mousePos - new Vector2(transform.position.x, transform.position.y)).normalized;
-        fingerObject.transform.right = fingerDirection;
 
         if (mousePos.x > 0 && mousePos.y > 0) //1 
         {
@@ -251,6 +249,8 @@ public class PlayerManager : MonoBehaviour
         {
             finger.enabled = false;
             fingerObject.GetComponent<Collider2D>().enabled = false;
+            fingerDirection = (mousePos - new Vector2(transform.position.x, transform.position.y)).normalized;
+            fingerObject.transform.right = fingerDirection;
         }
     }
     public void GhostDetect() 
@@ -325,7 +325,7 @@ public class PlayerManager : MonoBehaviour
     public void GameRestart() 
     {
         Time.timeScale = 1;
-        waveManager.waveNum = 1;
+        waveManager.roundNum = 0;
         curHealth = maxHealth;
         curEnergy = 0;
         startScreen.SetActive(false);

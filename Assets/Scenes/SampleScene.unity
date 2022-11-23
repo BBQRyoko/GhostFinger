@@ -1872,7 +1872,7 @@ GameObject:
   - component: {fileID: 1100577271}
   - component: {fileID: 1100577272}
   m_Layer: 0
-  m_Name: GhostHolder
+  m_Name: RoundManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1905,12 +1905,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a73bc70a6c7c4e42bbe64434cd55f70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waveNum: 1
   roundNum: 0
+  defaultRoundTime: 30
+  enemySpawnCounter: 0
   ghost: {fileID: 1908447457554354869, guid: 5a6c0e81edfedc14cbd608fbf674696d, type: 3}
   curGhosts: []
-  radius: 3
+  radius: 4
   waveText: {fileID: 1416100892}
+  tempSpawnRuleData: {fileID: 4900000, guid: f0cf3ec9bff1b4f40b2b65ce2b6e73b3, type: 3}
+  data: []
+  mapRounds: {fileID: 11400000, guid: 5fb74541e080c294ab52fd0623b2cbb2, type: 2}
 --- !u!1 &1104579500
 GameObject:
   m_ObjectHideFlags: 0

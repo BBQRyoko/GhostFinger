@@ -5,6 +5,9 @@ using UnityEngine.AI;
 using DG.Tweening;
 using UnityEngine.EventSystems;
 
+
+
+
 public class GhostManager : MonoBehaviour
 {
     SpriteRenderer sp;

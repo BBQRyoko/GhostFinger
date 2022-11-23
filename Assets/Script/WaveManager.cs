@@ -2,91 +2,99 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 using TMPro;
 
 public class WaveManager : MonoBehaviour
 {
     PlayerManager player;
-    public int waveNum;
     public int roundNum = 0;
-    float roundGap = 0;
+    float roundCounter = 0;
+    [SerializeField] float defaultRoundTime = 30f;
+    float enemySpawnCounter = 0;
     [SerializeField] GhostManager ghost;
     public List<GhostManager> curGhosts = new List<GhostManager>();
     [SerializeField] float radius;
     [SerializeField] TextMeshProUGUI waveText;
+
+    [Header("TempSpawnRule")]
+    [SerializeField] TextAsset tempSpawnRuleData;
+    public string[] data;
+    [SerializeField] MapRoundData mapRounds;
+
+
     private void Awake()
     {
-        waveNum = 1;
+        roundNum = 0;
+        roundCounter = defaultRoundTime;
+        enemySpawnCounter = 0;
         player = FindObjectOfType<PlayerManager>();
     }
-
     void Update()
     {
-        GhostManagment();
+        RoundSpawnManager();
     }
-    void GhostManagment() 
+
+    void RoundSpawnManager() 
     {
-        if (roundGap > 0) 
+        //RoundTimeManager
+        if (roundCounter <= 0)
         {
-            roundGap -= Time.deltaTime;
-        }
-        //改每轮波次的地方
-        if (roundNum >= waveNum + 2)
-        {
-            //必须清完怪Option.1
-            if (curGhosts.Count <= 0) 
+            if (curGhosts.Count <= 0)
             {
-                if (roundGap > 1.5f) 
-                {
-                    roundGap = 1.5f;
-                }
-                roundNum = 0;
-                waveNum += 1;
-                curGhosts.Clear();
+                roundCounter = defaultRoundTime;
+                roundNum += 1;
             }
-            //直接进下一轮Option.2
-            //if (roundGap <= 0) 
-            //{
-            //    roundNum = 0;
-            //    waveNum += 1;
-            //    curGhosts.Clear();
-            //}
+            else 
+            {
+                roundCounter = 0;
+            }
         }
         else 
         {
-            if (roundGap <= 0)
+            roundCounter -= Time.deltaTime;
+        }
+
+        //EnemySpawnTimer
+        if (enemySpawnCounter <= 0)
+        {
+            if (roundCounter > 0f)
             {
-                if (player.curHealth > 0 && !player.abilityUsing)
+                enemySpawnCounter = 3f;
+                curGhosts = GameObject.FindObjectsOfType<GhostManager>().ToList();
+                if (curGhosts.Count >= mapRounds.roundsInfo[roundNum].minEnemyNum && curGhosts.Count <= mapRounds.roundsInfo[roundNum].maxEnemyNum)
                 {
-                    roundNum++;
-                    GhostSpawn(waveNum, roundNum);
-                    roundGap = waveNum + 5f;
+                    GhostSpawn(mapRounds.roundsInfo[roundNum].autoSpawn);
+                }
+                else if (curGhosts.Count < mapRounds.roundsInfo[roundNum].minEnemyNum)
+                {
+                    GhostSpawn(mapRounds.roundsInfo[roundNum].autoSpawn + (mapRounds.roundsInfo[roundNum].minEnemyNum - curGhosts.Count));
                 }
             }
             else 
             {
-                if (curGhosts.Count <= 0) 
-                {
-                    if (roundGap > 1.5f)
-                    {
-                        roundGap = 1.5f;
-                    }
-                }
+                enemySpawnCounter = 0;
             }
         }
-        waveText.text = waveNum.ToString();
+        else 
+        {
+            enemySpawnCounter -= Time.deltaTime;
+        }
+
+        waveText.text = (roundNum + 1).ToString();
     }
-    void GhostSpawn(int wave, int round) 
+    void GhostSpawn(int wave)
     {
+        List<GhostManager> tempGhosts = new List<GhostManager>();
         //改怪物生成数量的地方
-        for (int i = 0; i < 2 + (wave - 1) + round; i++) 
+        for (int i = 0; i < wave; i++)
         {
             GhostManager spawnedGhost = Instantiate(ghost, transform);
-            spawnedGhost.GhostSpeedSet(wave);
-            curGhosts.Add(spawnedGhost);
+            tempGhosts.Add(spawnedGhost);
         }
-        float radiansOfSeparation = (Mathf.PI * 2) / curGhosts.Count;
-        for (int i = 0; i < curGhosts.Count; i++) 
+
+        float radiansOfSeparation = (Mathf.PI * 2) / tempGhosts.Count;
+        for (int i = 0; i < tempGhosts.Count; i++)
         {
             float randomRadian = Random.Range(-1, 1) * (Mathf.PI / 12);
 
@@ -94,7 +102,7 @@ public class WaveManager : MonoBehaviour
             if (x == 0) x = 0.01f;
             float y = Mathf.Cos(radiansOfSeparation * i + randomRadian) * (radius + Random.Range(-0.75f, 0.75f));
 
-            curGhosts[i].GetComponent<Transform>().position = new Vector3(x, y, 0);
+            tempGhosts[i].GetComponent<Transform>().position = new Vector3(x, y, 0);
         }
     }
 }
