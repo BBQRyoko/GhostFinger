@@ -22,6 +22,11 @@ public class WaveManager : MonoBehaviour
     public string[] data;
     [SerializeField] MapRoundData mapRounds;
 
+    [Header("GameobjectHolders")]
+    [SerializeField] Transform allParent;
+    [SerializeField] Vector3 originalScale = new Vector3(1,1,1);
+    [SerializeField] Vector3 finalScale = new Vector3(0.5f, 0.5f, 0.5f);
+    public float gameTimer;
 
     private void Awake()
     {
@@ -29,10 +34,31 @@ public class WaveManager : MonoBehaviour
         roundCounter = defaultRoundTime;
         enemySpawnCounter = 0;
         player = FindObjectOfType<PlayerManager>();
+        allParent.localScale = originalScale;
+        gameTimer = 0;
     }
     void Update()
     {
         RoundSpawnManager();
+        GameScaleManager();
+    }
+
+    void GameScaleManager() 
+    {
+        gameTimer += Time.deltaTime;
+        if (gameTimer < 60f)
+        {
+            allParent.localScale = originalScale;
+        }
+        else if (gameTimer > 360f)
+        {
+            allParent.localScale = finalScale;
+        }
+        else 
+        {
+            float tempScale = (1f - (0.35f / 300) * (gameTimer - 60));
+            allParent.localScale = new Vector3(tempScale, tempScale, tempScale);
+        }
     }
 
     void RoundSpawnManager() 

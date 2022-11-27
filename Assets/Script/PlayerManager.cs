@@ -50,7 +50,6 @@ public class PlayerManager : MonoBehaviour
         curHealth = maxHealth;
         curEnergy = 0;
         curLevel = 1;
-        requiredExp = 5 + curLevel;
         waveManager = FindObjectOfType<WaveManager>();
         finger = fingerObject.GetComponent<NavMeshObstacle>();
         Time.timeScale = 0;
@@ -102,7 +101,7 @@ public class PlayerManager : MonoBehaviour
     public void LevelManager() 
     {
         //改经验值的地方
-        requiredExp = 5 + curLevel;
+        requiredExp = (curLevel + 1) * (curLevel + 2);
         if (curExp >= requiredExp) 
         {
             float overExp = curExp - requiredExp;
@@ -326,6 +325,7 @@ public class PlayerManager : MonoBehaviour
     {
         Time.timeScale = 1;
         waveManager.roundNum = 0;
+        waveManager.gameTimer = 0;
         curHealth = maxHealth;
         curEnergy = 0;
         startScreen.SetActive(false);
