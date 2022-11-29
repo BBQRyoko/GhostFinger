@@ -15,16 +15,26 @@ public class GhostManager : MonoBehaviour
     NavMeshAgent agent;
     WaveManager waveManager;
     public bool isDestroying;
+    public int ghostDamage = 1;
     public float ghostHp = 30;
     public float ghostSp;
     public float ghostSize;
+    public int ghostDrop;
     [SerializeField] GameObject expDrop;
+    public List<bool> abilityList = new List<bool>();
+
+    [Header("EnemyStats")]
+    public EnemyInfoData enemyInfo;
+
+    //Enemy Ability
+
 
     void Awake()
     {
         sp = GetComponent<SpriteRenderer>();
         player = FindObjectOfType<PlayerManager>();
         waveManager = GetComponentInParent<WaveManager>();
+        GhostInitialize();
     }
     private void Start()
     {
@@ -36,6 +46,19 @@ public class GhostManager : MonoBehaviour
     {
         GhostStatus();
         GhostMovement();
+        //¼¼ÄÜ¼ì²â
+    }
+    public void GhostInitialize() 
+    {
+        ghostHp = enemyInfo.enemyHealth;
+        ghostSp = enemyInfo.enemySpeed;
+        ghostDamage = enemyInfo.enemyDamage;
+        //weight ...
+        ghostDrop = enemyInfo.enemyDropIndex;
+        for (int i = 0; i <= abilityList.Count - 1; i++) 
+        {
+            abilityList[i] = enemyInfo.enemyAbilities[i];
+        }
     }
     public void GhostSpeedSet(int wave) 
     {
@@ -100,7 +123,14 @@ public class GhostManager : MonoBehaviour
         else if (collision.gameObject.CompareTag("Bullet")) 
         {
             ghostHp -= collision.GetComponent<BulletManager>().bulletDamage;
-            Destroy(collision.gameObject);
+            if (collision.GetComponent<BulletManager>().bulletPenHealth > 0) 
+            {
+                collision.GetComponent<BulletManager>().bulletPenHealth -= 1;
+            }
+            else
+            {
+                Destroy(collision.gameObject);
+            }
         }
     }
 }

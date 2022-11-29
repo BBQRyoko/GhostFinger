@@ -5,8 +5,12 @@ using UnityEngine;
 public class BulletManager : MonoBehaviour
 {
     Rigidbody2D rigidbody;
+    [Header("×Óµ¯ÊôÐÔ")]
     public float bulletDamage = 10f;
     public float speed = 2f;
+    public int bulletPenHealth;
+    public bool bulletKnockOff;
+    public bool bulletBounce;
 
     private void Awake()
     {

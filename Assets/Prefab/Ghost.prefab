@@ -103,10 +103,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   isDestroying: 0
+  ghostDamage: 1
   ghostHp: 20
   ghostSp: 2
   ghostSize: 0
+  ghostDrop: 0
   expDrop: {fileID: 8121472710177081737, guid: c007f9489fb4a134bbcfef6df0bc4623, type: 3}
+  abilityList: 0000000000
+  enemyInfo: {fileID: 11400000, guid: 8f0027b6f4263794796394716ca65dbb, type: 2}
 --- !u!58 &8707387086915971341
 CircleCollider2D:
   m_ObjectHideFlags: 0

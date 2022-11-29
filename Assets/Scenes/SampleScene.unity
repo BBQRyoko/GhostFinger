@@ -652,6 +652,7 @@ MonoBehaviour:
   attackDamage: 1
   bulletNum: 1
   attackSpeed: 1
+  bulletPenNum: 0
   mousePos: {x: 0, y: 0}
   fingerObject: {fileID: 881306160}
   fingerDirection: {x: 0, y: 0}
@@ -1500,10 +1501,10 @@ MonoBehaviour:
       - m_Target: {fileID: 77330339}
         m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
         m_MethodName: UpgradeSelection
-        m_Mode: 3
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 11400000, guid: e1598a6dfd8002c489e7d6092d0e387c, type: 2}
+          m_ObjectArgumentAssemblyTypeName: PlayerUpgradeData, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -3246,7 +3247,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Bullet Speed
+  m_text: BulletPen
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3647,10 +3648,10 @@ MonoBehaviour:
       - m_Target: {fileID: 77330339}
         m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
         m_MethodName: UpgradeSelection
-        m_Mode: 3
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 11400000, guid: 9f40fb20026ef2140adc487b08cd1e96, type: 2}
+          m_ObjectArgumentAssemblyTypeName: PlayerUpgradeData, Assembly-CSharp
           m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
@@ -3781,10 +3782,10 @@ MonoBehaviour:
       - m_Target: {fileID: 77330339}
         m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
         m_MethodName: UpgradeSelection
-        m_Mode: 3
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 11400000, guid: 5ab2bf9c4b2a77843b248b02460c2ebb, type: 2}
+          m_ObjectArgumentAssemblyTypeName: PlayerUpgradeData, Assembly-CSharp
           m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 

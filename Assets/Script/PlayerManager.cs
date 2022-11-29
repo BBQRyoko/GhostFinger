@@ -25,6 +25,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] float attackDamage = 1;
     [SerializeField] int bulletNum = 1;
     [SerializeField] float attackSpeed = 1;
+    [SerializeField] int bulletPenNum = 0;
 
     [Header("Finger")]
     [SerializeField] Vector2 mousePos;
@@ -111,19 +112,19 @@ public class PlayerManager : MonoBehaviour
             Time.timeScale = 0;
         }
     }
-    public void UpgradeSelection(int index) 
+    public void UpgradeSelection(PlayerUpgradeData upgrade) 
     {
-        if (index == 0)
+        if (upgrade.upgradeIndex == 3)
         {
             bulletNum += 1;
         }
-        else if (index == 1)
+        else if (upgrade.upgradeIndex == 2)
         {
             attackDamage *= 1.5f;
         }
-        else if (index == 2) 
+        else if (upgrade.upgradeIndex == 1) 
         {
-            attackSpeed *= 1.5f;
+            bulletPenNum += 1;
         }
         skillSelectScreen.SetActive(false);
         Time.timeScale = 1;
@@ -281,6 +282,7 @@ public class PlayerManager : MonoBehaviour
                 bulletNum = 1;
                 GameObject bullet = Instantiate(bulletPrefab, transform.position, transform.rotation);
                 bullet.GetComponent<BulletManager>().bulletDamage *= attackDamage;
+                bullet.GetComponent<BulletManager>().bulletPenHealth = bulletPenNum;
                 Vector2 dir = new Vector2(curTarget.transform.position.x - transform.position.x, curTarget.transform.position.y - transform.position.y);
                 dir.Normalize();
                 bullet.GetComponent<Rigidbody2D>().AddForce(dir * 200f);
@@ -294,6 +296,7 @@ public class PlayerManager : MonoBehaviour
                 {
                     GameObject bullet = Instantiate(bulletPrefab, transform.position, transform.rotation);
                     bullet.GetComponent<BulletManager>().bulletDamage *= attackDamage;
+                    bullet.GetComponent<BulletManager>().bulletPenHealth = bulletPenNum;
                     Vector2 dir = new Vector2(curTarget.transform.position.x - transform.position.x, curTarget.transform.position.y - transform.position.y);
 
                     if (bulletNum % 2 == 1)
