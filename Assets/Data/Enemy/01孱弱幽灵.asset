@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyDamage: 1
   enemyHealth: 1
-  enemySpeed: 1
+  enemySpeed: 0.2
   enemyWeight: 1
   enemyDropIndex: 1
   enemyAbilities: 0000000000

@@ -26,6 +26,11 @@ public class GhostManager : MonoBehaviour
     [Header("EnemyStats")]
     public EnemyInfoData enemyInfo;
 
+    [Header("EnemyDebuff")]
+    public bool isElected;
+    public bool isFired;
+    public bool isFreezed;
+
     //Enemy Ability
 
 
@@ -34,18 +39,19 @@ public class GhostManager : MonoBehaviour
         sp = GetComponent<SpriteRenderer>();
         player = FindObjectOfType<PlayerManager>();
         waveManager = GetComponentInParent<WaveManager>();
-        GhostInitialize();
     }
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         agent.updateUpAxis = false;
         agent.updateRotation = false;
+        GhostInitialize();
     }
     void Update()
     {
         GhostStatus();
         GhostMovement();
+        GhostDebuffManager();
         //¼¼ÄÜ¼ì²â
     }
     public void GhostInitialize() 
@@ -59,11 +65,32 @@ public class GhostManager : MonoBehaviour
         {
             abilityList[i] = enemyInfo.enemyAbilities[i];
         }
+        agent.speed *= ghostSp;
     }
     public void GhostSpeedSet(int wave) 
     {
         float random = Random.Range(-0.25f, 1.25f);
         ghostSp = (wave - 1) * 0.25f + 1.5f + random;
+        
+    }
+    void GhostDebuffManager() 
+    {
+        if (isElected)
+        {
+            sp.color = new Color(1, 1, 0.5F);
+        }
+        else if (isFired)
+        {
+            sp.color = new Color(1, 0.5f, 0.5f);
+        }
+        else if (isFreezed)
+        {
+            sp.color = new Color(0.5f, 1, 1);
+        }
+        else 
+        {
+            sp.color = new Color(1, 1, 1);
+        }
     }
     void GhostStatus() 
     {
@@ -75,7 +102,10 @@ public class GhostManager : MonoBehaviour
         {
             sp.flipX = true;
         }
-        if (ghostHp <= 0) isDestroying = true;
+        if (ghostHp <= 0)
+        {
+            isDestroying = true;
+        }
         if (player.curHealth <= 0) GhostRemove();
         if (isDestroying)
         {
@@ -95,9 +125,12 @@ public class GhostManager : MonoBehaviour
     }
     public void GhostRemove() 
     {
+        if (isDestroying) 
+        {
+            GameObject exp = Instantiate(expDrop, transform);
+            exp.transform.parent = null;
+        }
         waveManager.curGhosts.Remove(this);
-        GameObject exp = Instantiate(expDrop, transform);
-        exp.transform.parent = null;
         Destroy(gameObject);
     }
     private void OnMouseOver()

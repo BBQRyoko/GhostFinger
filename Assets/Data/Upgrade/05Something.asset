@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 223652c925f776141b2c8a31c9318543, type: 3}
-  m_Name: "03\u5B50\u5F39\u6570"
+  m_Name: 05Something
   m_EditorClassIdentifier: 
-  upgradeIndex: 3
-  upgradeType: 1
-  upgradeName: Bullet Num
+  upgradeIndex: 5
+  upgradeType: 0
+  upgradeIcon: {fileID: 0}
+  upgradeName: Something
   upgradeDescription: 

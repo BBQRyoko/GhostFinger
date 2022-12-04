@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: "05\u8089\u8089\u70AE\u7075"
   m_EditorClassIdentifier: 
   enemyDamage: 1
-  enemyHealth: 6
-  enemySpeed: 0.75
+  enemyHealth: 10
+  enemySpeed: 0.5
   enemyWeight: 10
   enemyDropIndex: 1
   enemyAbilities: 0000010000

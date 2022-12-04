@@ -10,9 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 223652c925f776141b2c8a31c9318543, type: 3}
-  m_Name: "03\u5B50\u5F39\u6570"
+  m_Name: "04\u586B\u5145\u901F\u5EA6"
   m_EditorClassIdentifier: 
-  upgradeIndex: 3
-  upgradeType: 1
-  upgradeName: Bullet Num
+  upgradeIndex: 4
+  curType: 0
+  upgradeIcon: {fileID: 0}
+  upgradeName: Reload Speed
   upgradeDescription: 
+  curElement: 0
+  requiredFireTimes: 0
+  effectRadius: 0
+  fireRateChange: 0
+  targetNum: 0
+  bulletNumChange: 0
+  bulletDamageChange: 0
+  canChaseTarget: 0
+  isPet: 0
+  petDamageChange: 0
+  effectNumberByLevel:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0

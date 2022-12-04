@@ -10,4 +10,5 @@ public class RoundData : ScriptableObject
     public int maxEnemyNum;
 
     //EnemyType
+    public GhostManager[] enemies;
 }

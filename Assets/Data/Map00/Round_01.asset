@@ -15,3 +15,5 @@ MonoBehaviour:
   autoSpawn: 2
   minEnemyNum: 5
   maxEnemyNum: 6
+  enemies:
+  - {fileID: 1908447457554354869, guid: 5a6c0e81edfedc14cbd608fbf674696d, type: 3}

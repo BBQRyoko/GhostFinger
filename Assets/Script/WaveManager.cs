@@ -90,11 +90,11 @@ public class WaveManager : MonoBehaviour
                 curGhosts = GameObject.FindObjectsOfType<GhostManager>().ToList();
                 if (curGhosts.Count >= mapRounds.roundsInfo[roundNum].minEnemyNum && curGhosts.Count <= mapRounds.roundsInfo[roundNum].maxEnemyNum)
                 {
-                    GhostSpawn(mapRounds.roundsInfo[roundNum].autoSpawn);
+                    GhostSpawn(mapRounds.roundsInfo[roundNum].autoSpawn,false);
                 }
                 else if (curGhosts.Count < mapRounds.roundsInfo[roundNum].minEnemyNum)
                 {
-                    GhostSpawn(mapRounds.roundsInfo[roundNum].autoSpawn + (mapRounds.roundsInfo[roundNum].minEnemyNum - curGhosts.Count));
+                    GhostSpawn(mapRounds.roundsInfo[roundNum].autoSpawn + (mapRounds.roundsInfo[roundNum].minEnemyNum - curGhosts.Count),true);
                 }
             }
             else 
@@ -109,26 +109,53 @@ public class WaveManager : MonoBehaviour
 
         waveText.text = (roundNum + 1).ToString();
     }
-    void GhostSpawn(int wave)
+    void GhostSpawn(int spawnNum, bool isRandom)
     {
         List<GhostManager> tempGhosts = new List<GhostManager>();
         //改怪物生成数量的地方
-        for (int i = 0; i < wave; i++)
+        if (mapRounds.roundsInfo[roundNum].enemies.Length > 1)
         {
-            GhostManager spawnedGhost = Instantiate(ghost, transform);
-            tempGhosts.Add(spawnedGhost);
+            for (int i = 0; i < spawnNum; i++)
+            {
+                int randomRange = Random.Range(0, mapRounds.roundsInfo[roundNum].enemies.Length);
+                GhostManager spawnedGhost = Instantiate(mapRounds.roundsInfo[roundNum].enemies[randomRange], transform);
+                tempGhosts.Add(spawnedGhost);
+            }
+        }
+        else 
+        {
+            for (int i = 0; i < spawnNum; i++)
+            {
+                GhostManager spawnedGhost = Instantiate(mapRounds.roundsInfo[roundNum].enemies[0], transform);
+                tempGhosts.Add(spawnedGhost);
+            }
         }
 
-        float radiansOfSeparation = (Mathf.PI * 2) / tempGhosts.Count;
-        for (int i = 0; i < tempGhosts.Count; i++)
+        if (isRandom)
         {
-            float randomRadian = Random.Range(-1, 1) * (Mathf.PI / 12);
+            float radiansOfSeparation = (Mathf.PI * 2) / tempGhosts.Count;
+            for (int i = 0; i < tempGhosts.Count; i++)
+            {
+                float randomRadian = Random.Range(-1, 1) * (Mathf.PI / 12);
 
-            float x = Mathf.Sin(radiansOfSeparation * i + randomRadian) * (radius + Random.Range(-0.75f, 0.75f));
-            if (x == 0) x = 0.01f;
-            float y = Mathf.Cos(radiansOfSeparation * i + randomRadian) * (radius + Random.Range(-0.75f, 0.75f));
+                float x = Mathf.Sin(radiansOfSeparation * i + randomRadian) * (radius + Random.Range(-0.75f, 0.75f));
+                if (x == 0) x = 0.01f;
+                float y = Mathf.Cos(radiansOfSeparation * i + randomRadian) * (radius + Random.Range(-0.75f, 0.75f));
 
-            tempGhosts[i].GetComponent<Transform>().position = new Vector3(x, y, 0);
+                tempGhosts[i].GetComponent<Transform>().position = new Vector3(x, y, 0);
+            }
+        }
+        else 
+        {
+            for (int i = 0; i < tempGhosts.Count; i++)
+            {
+                float randomRadian = Random.Range(-1f, 1f) * (Mathf.PI * 2); ;
+
+                float x = Mathf.Sin(randomRadian) * (radius + Random.Range(-1.5f, 1.5f));
+                float y = Mathf.Cos(randomRadian) * (radius + Random.Range(-1.5f, 1.5f));
+
+                tempGhosts[i].GetComponent<Transform>().position = new Vector3(x, y, 0);
+            }
         }
     }
 }

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1746034839803523276}
   - component: {fileID: 1674575649820490297}
   m_Layer: 0
-  m_Name: Bullet
+  m_Name: SG_Bullet
   m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 6481412890079145689}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.62, y: 0, z: 0}
-  m_LocalScale: {x: 0.041359037, y: 0.041359037, z: 0.041359037}
+  m_LocalScale: {x: 0.054519482, y: 0.054519482, z: 0.054519482}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -138,3 +138,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletDamage: 10
   speed: 2
+  bulletPenHealth: 0
+  bulletKnockOff: 0
+  bulletBounce: 0

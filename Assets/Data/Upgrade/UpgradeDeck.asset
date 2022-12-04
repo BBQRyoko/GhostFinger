@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4f67ac1abd2959478b0623fb43b01b2, type: 3}
+  m_Name: UpgradeDeck
+  m_EditorClassIdentifier: 
+  upgradeList:
+  - {fileID: 11400000, guid: 5ab2bf9c4b2a77843b248b02460c2ebb, type: 2}
+  - {fileID: 11400000, guid: 9f40fb20026ef2140adc487b08cd1e96, type: 2}
+  - {fileID: 11400000, guid: e1598a6dfd8002c489e7d6092d0e387c, type: 2}
+  - {fileID: 11400000, guid: 1fa3fe9ddc518de4c9fc7e2be2d7d504, type: 2}
+  - {fileID: 11400000, guid: cbd6bd71b98d509449825a5d772107ec, type: 2}

@@ -4,9 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.AI;
 using DG.Tweening;
+using TMPro;
+
 
 public class PlayerManager : MonoBehaviour
 {
+    GameManager gameManager;
     NavMeshObstacle finger;
     WaveManager waveManager;
     [SerializeField] float maxHealth;
@@ -46,6 +49,12 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] float requiredExp;
     [SerializeField] GameObject skillSelectScreen;
 
+    [Header("Upgrades")]
+    [SerializeField] PlayerUpgradeListData listData;
+    [SerializeField] List<int> upgradeProgress = new List<int>();
+    [SerializeField] List<PlayerUpgradeData> curUpgrades = new List<PlayerUpgradeData>();
+    [SerializeField] GameObject[] playerUpgradeShows = new GameObject[8];
+
     private void Awake()
     {
         curHealth = maxHealth;
@@ -53,8 +62,11 @@ public class PlayerManager : MonoBehaviour
         curLevel = 1;
         waveManager = FindObjectOfType<WaveManager>();
         finger = fingerObject.GetComponent<NavMeshObstacle>();
+        gameManager = GetComponentInParent<GameManager>();
         Time.timeScale = 0;
         startScreen.SetActive(true);
+        curUpgrades.Clear();
+        upgradeProgress.Clear();
     }
     void Update()
     {
@@ -79,9 +91,10 @@ public class PlayerManager : MonoBehaviour
             abilityButton.SetActive(true);
         }
         TempGameManager();
-        TurretManagment();
+        //TurretManagment();
         FingerManagment();
         LevelManager();
+        PlayerUpgradeStatus();
     }
     public void TempGameManager() 
     {
@@ -108,43 +121,84 @@ public class PlayerManager : MonoBehaviour
             float overExp = curExp - requiredExp;
             curExp = overExp;
             curLevel += 1;
+            gameManager.RandomUpgradePopUp();
             skillSelectScreen.SetActive(true);
             Time.timeScale = 0;
         }
     }
-    public void UpgradeSelection(PlayerUpgradeData upgrade) 
+    public void UpgradeSelection(UpgradeHolder holder) 
     {
-        if (upgrade.upgradeIndex == 3)
+        if (!curUpgrades.Contains(holder.curUpgrade))
         {
-            bulletNum += 1;
+            curUpgrades.Add(holder.curUpgrade);
+            upgradeProgress.Add(1);
         }
-        else if (upgrade.upgradeIndex == 2)
+        else 
         {
-            attackDamage *= 1.5f;
-        }
-        else if (upgrade.upgradeIndex == 1) 
-        {
-            bulletPenNum += 1;
+            if (curUpgrades.Count == 1)
+            {
+                upgradeProgress[0] += 1;
+            }
+            else if (curUpgrades.Count >= 2)
+            {
+                for (int i = 0; i <= curUpgrades.Count - 1; i++)
+                {
+                    if (curUpgrades[i] == holder.curUpgrade) 
+                    {
+                        upgradeProgress[i] += 1;
+                    }
+                }
+            }
         }
         skillSelectScreen.SetActive(false);
         Time.timeScale = 1;
     }
+    public void PlayerUpgradeStatus() 
+    {
+        if (curUpgrades.Count == 1)
+        {
+            playerUpgradeShows[0].SetActive(true);
+            playerUpgradeShows[0].GetComponentInChildren<TextMeshProUGUI>().text = upgradeProgress[0].ToString();
+        }
+        else if (curUpgrades.Count >= 2)
+        {
+            for (int i = 0; i <= curUpgrades.Count - 1; i++)
+            {
+                playerUpgradeShows[i].SetActive(true);
+                playerUpgradeShows[i].GetComponentInChildren<TextMeshProUGUI>().text = upgradeProgress[i].ToString();
+            }
+        }
+        else
+        {
+            foreach (GameObject upgradeIcon in playerUpgradeShows)
+            {
+                upgradeIcon.SetActive(false);
+            }
+        }
+
+        //技能生效
+        foreach (PlayerUpgradeData upgrade in curUpgrades) 
+        {
+            
+        }
+    }
+
     public void TurretManagment() 
     {
-        if (!curTarget)
-        {
-            GhostDetect();
-        }
-        else 
-        {
-            if (curTarget.isDestroying) curTarget = null;
-            if (fireCountdown <= 0)
-            {
-                TurretShoot();
-                fireCountdown = 1 / (fireRate * attackSpeed);
-            }
-            fireCountdown -= Time.deltaTime;
-        }
+        //if (!curTarget)
+        //{
+        //    GhostDetect();
+        //}
+        //else 
+        //{
+        //    if (curTarget.isDestroying) curTarget = null;
+        //    if (fireCountdown <= 0)
+        //    {
+        //        TurretShoot();
+        //        fireCountdown = 1 / (fireRate * attackSpeed);
+        //    }
+        //    fireCountdown -= Time.deltaTime;
+        //}
     }
     public void FingerManagment() 
     {
@@ -332,6 +386,8 @@ public class PlayerManager : MonoBehaviour
         curHealth = maxHealth;
         curEnergy = 0;
         startScreen.SetActive(false);
+        upgradeProgress.Clear();
+        curUpgrades.Clear();
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
