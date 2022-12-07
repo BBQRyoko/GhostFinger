@@ -29,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1908447457554354866}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -100, y: -100, z: 0}
   m_LocalScale: {x: 0.12, y: 0.12, z: 0.12}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -111,6 +111,9 @@ MonoBehaviour:
   expDrop: {fileID: 8121472710177081737, guid: c007f9489fb4a134bbcfef6df0bc4623, type: 3}
   abilityList: 0000000000
   enemyInfo: {fileID: 11400000, guid: 48a14ba5ce5181d488c4f2acf9ac433e, type: 2}
+  isElected: 0
+  isFired: 0
+  isFreezed: 0
 --- !u!58 &8707387086915971341
 CircleCollider2D:
   m_ObjectHideFlags: 0

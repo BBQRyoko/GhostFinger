@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 using UnityEngine.UI;
 using System.Linq;
 using TMPro;
@@ -8,6 +9,7 @@ using TMPro;
 public class WaveManager : MonoBehaviour
 {
     PlayerManager player;
+    EnemyPool enemyPool;
     public int roundNum = 0;
     float roundCounter = 0;
     [SerializeField] float defaultRoundTime = 30f;
@@ -34,6 +36,7 @@ public class WaveManager : MonoBehaviour
         roundCounter = defaultRoundTime;
         enemySpawnCounter = 0;
         player = FindObjectOfType<PlayerManager>();
+        enemyPool = GetComponent<EnemyPool>();
         allParent.localScale = originalScale;
         gameTimer = 0;
     }
@@ -118,7 +121,9 @@ public class WaveManager : MonoBehaviour
             for (int i = 0; i < spawnNum; i++)
             {
                 int randomRange = Random.Range(0, mapRounds.roundsInfo[roundNum].enemies.Length);
-                GhostManager spawnedGhost = Instantiate(mapRounds.roundsInfo[roundNum].enemies[randomRange], transform);
+                GhostManager spawnedGhost = enemyPool.ghostPrefabPool.Get();
+                spawnedGhost.gameObject.SetActive(false);
+                spawnedGhost.EnemyInfoImport(mapRounds.roundsInfo[roundNum].enemies[randomRange]); 
                 tempGhosts.Add(spawnedGhost);
             }
         }
@@ -126,11 +131,12 @@ public class WaveManager : MonoBehaviour
         {
             for (int i = 0; i < spawnNum; i++)
             {
-                GhostManager spawnedGhost = Instantiate(mapRounds.roundsInfo[roundNum].enemies[0], transform);
+                GhostManager spawnedGhost = enemyPool.ghostPrefabPool.Get();
+                spawnedGhost.gameObject.SetActive(false);
+                spawnedGhost.EnemyInfoImport(mapRounds.roundsInfo[roundNum].enemies[0]);
                 tempGhosts.Add(spawnedGhost);
             }
         }
-
         if (isRandom)
         {
             float radiansOfSeparation = (Mathf.PI * 2) / tempGhosts.Count;
@@ -143,6 +149,7 @@ public class WaveManager : MonoBehaviour
                 float y = Mathf.Cos(radiansOfSeparation * i + randomRadian) * (radius + Random.Range(-0.75f, 0.75f));
 
                 tempGhosts[i].GetComponent<Transform>().position = new Vector3(x, y, 0);
+                tempGhosts[i].gameObject.SetActive(true);
             }
         }
         else 
@@ -155,6 +162,7 @@ public class WaveManager : MonoBehaviour
                 float y = Mathf.Cos(randomRadian) * (radius + Random.Range(-1.5f, 1.5f));
 
                 tempGhosts[i].GetComponent<Transform>().position = new Vector3(x, y, 0);
+                tempGhosts[i].gameObject.SetActive(true);
             }
         }
     }

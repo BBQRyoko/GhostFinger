@@ -366,18 +366,6 @@ public class PlayerManager : MonoBehaviour
             }
         }
     }
-    public void TempAbilityButton() 
-    {
-        curEnergy = 0;
-        GameObject abilityRing = Instantiate(abilityPrefab, null);
-        abilityUsing = true;
-        abilityRing.transform.DOScale(new Vector3(1.4f, 1.4f, 1.4f), 1.5f).SetEase(Ease.OutQuad).OnComplete(() => TempDestroy(abilityRing));
-    }
-    void TempDestroy(GameObject gameObject) 
-    {
-        abilityUsing = false;
-        Destroy(gameObject);
-    }
     public void GameRestart() 
     {
         Time.timeScale = 1;
@@ -393,7 +381,7 @@ public class PlayerManager : MonoBehaviour
     {
         if (collision.gameObject.tag == "Exp")
         {
-            Destroy(collision.gameObject);
+            gameManager.GetComponent<ExpPool>().expPrefabPool.Release(collision.gameObject);
             curExp += 1;
         }
     }

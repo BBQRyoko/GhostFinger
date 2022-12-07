@@ -20,4 +20,12 @@ public class BulletManager : MonoBehaviour
     {
         rigidbody.velocity = dir * speed;
     }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Bound")
+        {
+            BulletPool bulletPool = GetComponentInParent<BulletPool>();
+            bulletPool.bulletPrefabPool.Release(this.gameObject);
+        }
+    }
 }

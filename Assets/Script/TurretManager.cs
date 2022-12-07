@@ -5,6 +5,7 @@ using UnityEngine;
 public class TurretManager : MonoBehaviour
 {
     [SerializeField] PlayerManager playerManager;
+    [SerializeField] BulletPool bulletPool;
     [SerializeField] float rotateSpeed = -0.75f;
     float timerCounter = 0;
     float rotateRadius;
@@ -26,9 +27,11 @@ public class TurretManager : MonoBehaviour
     float shootingTimer;
     [SerializeField] int bulletNum, defaultAmmo;
     [SerializeField] float defaultFireRate, reloadSpeed, attackDamage;
-    [SerializeField] GameObject bulletPrefab;
 
-
+    private void Awake()
+    {
+        bulletPool = GetComponentInParent<BulletPool>();
+    }
     void Start()
     {
         rotateRadius = Mathf.Abs(Vector2.Distance(transform.position, playerManager.transform.position));
@@ -97,12 +100,12 @@ public class TurretManager : MonoBehaviour
                 if (bulletNum <= 1)
                 {
                     bulletNum = 1;
-                    GameObject bullet = Instantiate(bulletPrefab, transform.position, transform.rotation);
+                    GameObject bullet = bulletPool.bulletPrefabPool.Get();
+                    bullet.transform.position = turretGO.position;
                     bullet.GetComponent<BulletManager>().bulletDamage *= attackDamage;
                     Vector2 dir = new Vector2(curTarget.transform.position.x - transform.position.x, curTarget.transform.position.y - transform.position.y);
                     dir.Normalize();
                     bullet.GetComponent<Rigidbody2D>().AddForce(dir * 200f);
-                    Destroy(bullet, 2f);
                 }
                 else
                 {
@@ -110,7 +113,8 @@ public class TurretManager : MonoBehaviour
                     int median = bulletNum / 2;
                     for (int i = 0; i < bulletNum; i++)
                     {
-                        GameObject bullet = Instantiate(bulletPrefab, transform.position, transform.rotation);
+                        GameObject bullet = bulletPool.bulletPrefabPool.Get();
+                        bullet.transform.position = turretGO.position;
                         bullet.GetComponent<BulletManager>().bulletDamage *= attackDamage;
                         Vector2 dir = new Vector2(curTarget.transform.position.x - transform.position.x, curTarget.transform.position.y - transform.position.y);
 
@@ -122,7 +126,6 @@ public class TurretManager : MonoBehaviour
                         {
                             bullet.GetComponent<BulletManager>().SetSpeed(Quaternion.AngleAxis(bulletAngle * (i - median) + bulletAngle / 2, Vector3.forward) * dir);
                         }
-                        Destroy(bullet, 1f);
                     }
                 }
                 ammoNum -= 1;
@@ -176,6 +179,6 @@ public class TurretManager : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-
+        
     }
 }

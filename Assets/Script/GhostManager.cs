@@ -10,6 +10,8 @@ using UnityEngine.EventSystems;
 
 public class GhostManager : MonoBehaviour
 {
+    ExpPool expPool;
+    EnemyPool enemyPool;
     SpriteRenderer sp;
     [SerializeField] PlayerManager player;
     NavMeshAgent agent;
@@ -39,13 +41,12 @@ public class GhostManager : MonoBehaviour
         sp = GetComponent<SpriteRenderer>();
         player = FindObjectOfType<PlayerManager>();
         waveManager = GetComponentInParent<WaveManager>();
-    }
-    private void Start()
-    {
+        expPool = GetComponentInParent<ExpPool>();
+        enemyPool = GetComponentInParent<EnemyPool>();
         agent = GetComponent<NavMeshAgent>();
         agent.updateUpAxis = false;
         agent.updateRotation = false;
-        GhostInitialize();
+        //GhostInitialize();
     }
     void Update()
     {
@@ -106,7 +107,10 @@ public class GhostManager : MonoBehaviour
         {
             isDestroying = true;
         }
-        if (player.curHealth <= 0) GhostRemove();
+        if (player.curHealth <= 0) 
+        {
+            GhostRemove();
+        } 
         if (isDestroying)
         {
             gameObject.transform.DORotate(new Vector3(0, 0, 360), 0.75f, RotateMode.FastBeyond360).SetEase(Ease.OutQuad);
@@ -115,6 +119,7 @@ public class GhostManager : MonoBehaviour
     }
     void GhostMovement() 
     {
+        if (isDestroying) return;
         float distance = Vector2.Distance(transform.position, player.transform.position);
         if (distance > 0) 
         {
@@ -125,44 +130,50 @@ public class GhostManager : MonoBehaviour
     }
     public void GhostRemove() 
     {
-        if (isDestroying) 
-        {
-            GameObject exp = Instantiate(expDrop, transform);
-            exp.transform.parent = null;
-        }
         waveManager.curGhosts.Remove(this);
-        Destroy(gameObject);
+        enemyPool.ghostPrefabPool.Release(this);
+        ghostHp = enemyInfo.enemyHealth;
+        gameObject.transform.localScale = new Vector3(0.12f, 0.12f, 0.12f);
+        isDestroying = false;
     }
-    private void OnMouseOver()
+    public void EnemyInfoImport(EnemyInfoData enemyData) 
     {
-        //if (Input.GetMouseButtonDown(0)) 
-        //{
-        //    player.curEnergy += 10;
-        //    isDestroying = true;
-        //}
+        enemyInfo = enemyData;
+        sp.sprite = enemyData.sprite;
+        ghostHp = enemyData.enemyHealth;
+        ghostSp = enemyData.enemySpeed;
+        ghostDamage = enemyData.enemyDamage;
+        ghostDrop = enemyData.enemyDropIndex;
+        for (int i = 0; i <= abilityList.Count - 1; i++)
+        {
+            abilityList[i] = enemyData.enemyAbilities[i];
+        }
+        gameObject.transform.localScale = new Vector3(0.12f, 0.12f, 0.12f);
+        agent.speed = ghostSp;
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            //isDestroying = true;
             player.curHealth -= 10;
             GhostRemove();
-        }
-        else if (collision.gameObject.CompareTag("Ability"))
-        {
-            isDestroying = true;
         }
         else if (collision.gameObject.CompareTag("Bullet")) 
         {
             ghostHp -= collision.GetComponent<BulletManager>().bulletDamage;
+            if (ghostHp <= 0) 
+            {
+                var exp = expPool.expPrefabPool.Get();
+                exp.transform.position = transform.position;
+            }
             if (collision.GetComponent<BulletManager>().bulletPenHealth > 0) 
             {
                 collision.GetComponent<BulletManager>().bulletPenHealth -= 1;
             }
             else
             {
-                Destroy(collision.gameObject);
+                BulletPool bulletPool = player.GetComponent<BulletPool>();
+                bulletPool.bulletPrefabPool.Release(collision.gameObject);
             }
         }
     }

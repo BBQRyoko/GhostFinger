@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f8bdda4baee6e14fb160d657549eb98, type: 3}
   m_Name: "04\u5E7D\u7075\u5148\u950B"
   m_EditorClassIdentifier: 
+  sprite: {fileID: 21300000, guid: 481b4a0de5b4e2748a0074b8e7f9b776, type: 3}
   enemyDamage: 2
   enemyHealth: 1
-  enemySpeed: 2
+  enemySpeed: 0.8
   enemyWeight: 1
   enemyDropIndex: 1
   enemyAbilities: 0001000000
