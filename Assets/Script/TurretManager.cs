@@ -6,27 +6,23 @@ public class TurretManager : MonoBehaviour
 {
     [SerializeField] PlayerManager playerManager;
     [SerializeField] BulletPool bulletPool;
-    [SerializeField] float rotateSpeed = -0.75f;
     float timerCounter = 0;
     float rotateRadius;
-
-    [Header("FOV")]
     [SerializeField] GameObject turretRef;
-    [SerializeField] float fovRadius;
-    [Range(1, 360)][SerializeField] float fovAngle = 45f;
     public LayerMask targetLayer;
-
     public GhostManager curTarget;
+    [SerializeField] Transform turretGO;
 
     [Header("TurretStats")]
-    [SerializeField] Transform turretGO;
-    bool isShooting;
+    [SerializeField] float rotateSpeed = -0.75f;
+    [SerializeField] float fovRadius;
+    [Range(1, 360)][SerializeField] float fovAngle = 45f;
+    [SerializeField] int bulletNum;
+    [SerializeField] float defaultFireTimer, defaultShootingPause = 0.05f, attackDamage;
     int ammoNum;
+    int defaultAmmo = 1;
     float fireTimer;
-    float reloadTimer;
     float shootingTimer;
-    [SerializeField] int bulletNum, defaultAmmo;
-    [SerializeField] float defaultFireRate, reloadSpeed, attackDamage;
 
     private void Awake()
     {
@@ -42,6 +38,7 @@ public class TurretManager : MonoBehaviour
         TurretMoving();
         StartCoroutine(FOVCheck());
         TurretShooting();
+
         if (ammoNum <= 0)
         {
             if (shootingTimer > 0)
@@ -54,17 +51,25 @@ public class TurretManager : MonoBehaviour
             }
         }
 
-        if (reloadTimer > 0)
+        if (fireTimer > 0)
         {
-            if (shootingTimer <= 0) 
+            if (shootingTimer <= 0)
             {
-                reloadTimer -= Time.deltaTime;
+                fireTimer -= Time.deltaTime;
             }
         }
         else
         {
-            reloadTimer = 0;
+            fireTimer = 0;
             ammoNum = defaultAmmo;
+        }
+
+        if (curTarget) 
+        {
+            if (curTarget.isDestroying || !curTarget.gameObject.active) 
+            {
+                curTarget = null;
+            }
         }
     }
 
@@ -72,7 +77,7 @@ public class TurretManager : MonoBehaviour
     {
         if (curTarget && ammoNum > 0) return;
         if (shootingTimer > 0) return;
-        timerCounter += Time.deltaTime * (rotateSpeed);
+        timerCounter += Time.deltaTime * (-rotateSpeed);
 
         float x = Mathf.Cos(timerCounter) * rotateRadius;
         float y = Mathf.Sin(timerCounter) * rotateRadius;
@@ -89,96 +94,81 @@ public class TurretManager : MonoBehaviour
         if (!curTarget || ammoNum <= 0) return;
         if (curTarget.isDestroying) curTarget = null;
 
-        if (fireTimer > 0)
+        if (curTarget)
         {
-            fireTimer -= Time.deltaTime;
-        }
-        else 
-        {
-            if (curTarget)
+            if (bulletNum <= 1)
             {
-                if (bulletNum <= 1)
+                bulletNum = 1;
+                GameObject bullet = bulletPool.bulletPrefabPool.Get();
+                bullet.transform.position = turretGO.position;
+                bullet.GetComponent<BulletManager>().bulletDamage *= attackDamage;
+                Vector2 dir = new Vector2(curTarget.transform.position.x - transform.position.x, curTarget.transform.position.y - transform.position.y);
+                dir.Normalize();
+                bullet.GetComponent<Rigidbody2D>().AddForce(dir * 200f);
+            }
+            else
+            {
+                float bulletAngle = 15f;
+                int median = bulletNum / 2;
+                for (int i = 0; i < bulletNum; i++)
                 {
-                    bulletNum = 1;
                     GameObject bullet = bulletPool.bulletPrefabPool.Get();
                     bullet.transform.position = turretGO.position;
                     bullet.GetComponent<BulletManager>().bulletDamage *= attackDamage;
                     Vector2 dir = new Vector2(curTarget.transform.position.x - transform.position.x, curTarget.transform.position.y - transform.position.y);
-                    dir.Normalize();
-                    bullet.GetComponent<Rigidbody2D>().AddForce(dir * 200f);
-                }
-                else
-                {
-                    float bulletAngle = 15f;
-                    int median = bulletNum / 2;
-                    for (int i = 0; i < bulletNum; i++)
-                    {
-                        GameObject bullet = bulletPool.bulletPrefabPool.Get();
-                        bullet.transform.position = turretGO.position;
-                        bullet.GetComponent<BulletManager>().bulletDamage *= attackDamage;
-                        Vector2 dir = new Vector2(curTarget.transform.position.x - transform.position.x, curTarget.transform.position.y - transform.position.y);
 
-                        if (bulletNum % 2 == 1)
-                        {
-                            bullet.GetComponent<BulletManager>().SetSpeed(Quaternion.AngleAxis(bulletAngle * (i - median), Vector3.forward) * dir);
-                        }
-                        else
-                        {
-                            bullet.GetComponent<BulletManager>().SetSpeed(Quaternion.AngleAxis(bulletAngle * (i - median) + bulletAngle / 2, Vector3.forward) * dir);
-                        }
+                    if (bulletNum % 2 == 1)
+                    {
+                        bullet.GetComponent<BulletManager>().SetSpeed(Quaternion.AngleAxis(bulletAngle * (i - median), Vector3.forward) * dir);
+                    }
+                    else
+                    {
+                        bullet.GetComponent<BulletManager>().SetSpeed(Quaternion.AngleAxis(bulletAngle * (i - median) + bulletAngle / 2, Vector3.forward) * dir);
                     }
                 }
-                ammoNum -= 1;
-                if (ammoNum <= 0)
-                {
-                    shootingTimer = 0.05f;
-                    reloadTimer = reloadSpeed;
-                }
-                else 
-                {
-                    fireTimer = defaultFireRate;
-                }
+            }
+            ammoNum -= 1;
+            if (ammoNum <= 0)
+            {
+                shootingTimer = defaultShootingPause;
+                fireTimer = defaultFireTimer;
             }
         }
     }
-    private IEnumerator FOVCheck() 
+    private IEnumerator FOVCheck()
     {
-        WaitForSeconds wait = new WaitForSeconds(0.2f);
+        WaitForSeconds wait = new WaitForSeconds(1f);
 
-        while (true) 
+        while (true)
         {
             yield return wait;
             FOV();
-        } 
+        }
     }
 
-    private void FOV() 
+    private void FOV()
     {
-        if (ammoNum<=0 || reloadTimer>0) return;
-        Collider2D rangeCheck = Physics2D.OverlapCircle(transform.position, fovRadius, targetLayer);
-
+        if (fireTimer > 0 ) return;
+        if (curTarget) return;
+        Collider2D[] rangeCheck = Physics2D.OverlapCircleAll(transform.position, fovRadius, targetLayer);
+        float shortestDistance = 10;
         if (rangeCheck != null)
         {
-            Transform target = rangeCheck.transform;
-            Vector2 directionToTarget = (target.position - transform.position).normalized;
-            if (Vector2.Angle(turretGO.position - transform.position, directionToTarget) < fovAngle / 2)
+            foreach (Collider2D enemy in rangeCheck) 
             {
-                float distanceToTarget = Vector2.Distance(transform.position, target.position);
-                if(!target.GetComponent<GhostManager>().isDestroying) curTarget = target.GetComponent<GhostManager>();
-            }
-            else 
-            {
-                curTarget = null;
-            }
-        }
-        else 
-        {
-            curTarget = null;
-        }
-    }
+                Transform target = enemy.transform;
+                Vector2 directionToTarget = (target.position - transform.position).normalized;
 
-    private void OnDrawGizmos()
-    {
-        
+                if (Vector2.Angle(turretGO.position - transform.position, directionToTarget) < fovAngle / 2)
+                {
+                    float distanceToTarget = Vector2.Distance(transform.position, target.position);
+                    if (!target.GetComponent<GhostManager>().isDestroying && distanceToTarget < shortestDistance) 
+                    {
+                        shortestDistance = distanceToTarget;
+                        curTarget = target.GetComponent<GhostManager>();
+                    }
+                }
+            }
+        }
     }
 }

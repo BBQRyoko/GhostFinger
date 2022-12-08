@@ -1242,9 +1242,8 @@ MonoBehaviour:
   curTarget: {fileID: 0}
   turretGO: {fileID: 847511764}
   bulletNum: 1
-  defaultAmmo: 1
-  defaultFireRate: 0
-  reloadSpeed: 1
+  defaultFireTime: 0
+  defaultAttackPauseTime: 0.05
   attackDamage: 1
 --- !u!212 &193901035
 SpriteRenderer:
@@ -2022,16 +2021,15 @@ MonoBehaviour:
   rotateSpeed: 1.25
   turretRef: {fileID: 461828382}
   fovRadius: 3
-  fovAngle: 30
+  fovAngle: 45
   targetLayer:
     serializedVersion: 2
     m_Bits: 64
   curTarget: {fileID: 0}
   turretGO: {fileID: 1530167737}
   bulletNum: 1
-  defaultAmmo: 1
-  defaultFireRate: 0
-  reloadSpeed: 1
+  defaultFireTime: 1.2
+  defaultAttackPauseTime: 0.05
   attackDamage: 1
 --- !u!212 &461828385
 SpriteRenderer:
@@ -2476,9 +2474,8 @@ MonoBehaviour:
   curTarget: {fileID: 0}
   turretGO: {fileID: 2146885909}
   bulletNum: 1
-  defaultAmmo: 15
-  defaultFireRate: 0.35
-  reloadSpeed: 0.75
+  defaultFireTime: 0
+  defaultAttackPauseTime: 0.05
   attackDamage: 1
 --- !u!212 &602473990
 SpriteRenderer:
@@ -2988,9 +2985,8 @@ MonoBehaviour:
   curTarget: {fileID: 0}
   turretGO: {fileID: 351253944}
   bulletNum: 6
-  defaultAmmo: 2
-  defaultFireRate: 0.25
-  reloadSpeed: 0.3
+  defaultFireTime: 0
+  defaultAttackPauseTime: 0.05
   attackDamage: 10
 --- !u!1 &686779162
 GameObject:
@@ -4564,9 +4560,8 @@ MonoBehaviour:
   curTarget: {fileID: 0}
   turretGO: {fileID: 1438069937}
   bulletNum: 1
-  defaultAmmo: 2
-  defaultFireRate: 0.3
-  reloadSpeed: 0.1
+  defaultFireTime: 0
+  defaultAttackPauseTime: 0.05
   attackDamage: 1
 --- !u!212 &1164906752
 SpriteRenderer:
