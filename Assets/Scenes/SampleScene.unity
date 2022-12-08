@@ -1232,18 +1232,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerManager: {fileID: 77330339}
   bulletPool: {fileID: 0}
-  rotateSpeed: -0.5
   turretRef: {fileID: 193901032}
-  fovRadius: 3
-  fovAngle: 122
   targetLayer:
     serializedVersion: 2
     m_Bits: 64
   curTarget: {fileID: 0}
   turretGO: {fileID: 847511764}
+  rotateSpeed: -0.5
+  fovRadius: 3
+  fovAngle: 122
   bulletNum: 1
-  defaultFireTime: 0
-  defaultAttackPauseTime: 0.05
+  defaultFireTimer: 0
+  defaultShootingPause: 0
   attackDamage: 1
 --- !u!212 &193901035
 SpriteRenderer:
@@ -2018,18 +2018,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerManager: {fileID: 77330339}
   bulletPool: {fileID: 0}
-  rotateSpeed: 1.25
   turretRef: {fileID: 461828382}
-  fovRadius: 3
-  fovAngle: 45
   targetLayer:
     serializedVersion: 2
     m_Bits: 64
   curTarget: {fileID: 0}
   turretGO: {fileID: 1530167737}
+  rotateSpeed: 1.25
+  fovRadius: 3
+  fovAngle: 45
   bulletNum: 1
-  defaultFireTime: 1.2
-  defaultAttackPauseTime: 0.05
+  defaultFireTimer: 1.2
+  defaultShootingPause: 0.05
   attackDamage: 1
 --- !u!212 &461828385
 SpriteRenderer:
@@ -2464,18 +2464,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerManager: {fileID: 77330339}
   bulletPool: {fileID: 0}
-  rotateSpeed: 0.75
   turretRef: {fileID: 602473987}
-  fovRadius: 2.75
-  fovAngle: 279
   targetLayer:
     serializedVersion: 2
     m_Bits: 64
   curTarget: {fileID: 0}
   turretGO: {fileID: 2146885909}
+  rotateSpeed: 0.75
+  fovRadius: 2.75
+  fovAngle: 279
   bulletNum: 1
-  defaultFireTime: 0
-  defaultAttackPauseTime: 0.05
+  defaultFireTimer: 0
+  defaultShootingPause: 0
   attackDamage: 1
 --- !u!212 &602473990
 SpriteRenderer:
@@ -2975,18 +2975,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerManager: {fileID: 77330339}
   bulletPool: {fileID: 0}
-  rotateSpeed: -0.75
   turretRef: {fileID: 665697063}
-  fovRadius: 2
-  fovAngle: 279
   targetLayer:
     serializedVersion: 2
     m_Bits: 64
   curTarget: {fileID: 0}
   turretGO: {fileID: 351253944}
+  rotateSpeed: -0.75
+  fovRadius: 2
+  fovAngle: 279
   bulletNum: 6
-  defaultFireTime: 0
-  defaultAttackPauseTime: 0.05
+  defaultFireTimer: 0
+  defaultShootingPause: 0
   attackDamage: 10
 --- !u!1 &686779162
 GameObject:
@@ -4550,18 +4550,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerManager: {fileID: 77330339}
   bulletPool: {fileID: 0}
-  rotateSpeed: 0.25
   turretRef: {fileID: 1164906749}
-  fovRadius: 3
-  fovAngle: 279
   targetLayer:
     serializedVersion: 2
     m_Bits: 64
   curTarget: {fileID: 0}
   turretGO: {fileID: 1438069937}
+  rotateSpeed: 0.25
+  fovRadius: 3
+  fovAngle: 279
   bulletNum: 1
-  defaultFireTime: 0
-  defaultAttackPauseTime: 0.05
+  defaultFireTimer: 0
+  defaultShootingPause: 0
   attackDamage: 1
 --- !u!212 &1164906752
 SpriteRenderer:
