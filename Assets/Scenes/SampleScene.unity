@@ -816,7 +816,6 @@ MonoBehaviour:
   - {fileID: 466993963}
   - {fileID: 1904434960}
   turretsUpgradeList: []
-  turretUpgradeProgress: 
   turretsShows:
   - {fileID: 375752105}
   - {fileID: 360264262}

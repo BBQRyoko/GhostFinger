@@ -83,7 +83,6 @@ public class TurretManager : MonoBehaviour
             }
         }
     }
-
     private void TurretMoving()
     {
         if (curTarget && ammoNum > 0) return;
@@ -180,8 +179,25 @@ public class TurretManager : MonoBehaviour
             }
         }
     }
-    private void TurretRankManager() 
+    public void TurretRankUp() 
     {
-    
+        turretRank += 1;
+        
+        if (turretRank == 2)
+        {
+
+        }
+        else if (turretRank == 3)
+        {
+
+        }
+        else if (turretRank == 4)
+        {
+
+        }
+        else if (turretRank == 5) 
+        {
+        
+        }
     }
 }

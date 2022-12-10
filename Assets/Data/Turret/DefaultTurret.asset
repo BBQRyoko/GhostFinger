@@ -19,9 +19,8 @@ MonoBehaviour:
   defaultFireTimer: 1.2
   defaultShootingPause: 0.05
   attackDamage: 1
-  upgradeList: 0000000000000000000000000000000000000000
+  upgradeList: 00000000020000000400000000000000
   upgradeEffectNum:
-  - 0
   - 0
   - 0
   - 0

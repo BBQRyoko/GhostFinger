@@ -164,7 +164,7 @@ public class PlayerManager : MonoBehaviour
             {
                 if (turretsUpgradeList.Count == 1)
                 {
-                    tempTurretsSlots[0].GetComponent<TurretManager>().turretRank += 1;
+                    tempTurretsSlots[0].GetComponent<TurretManager>().TurretRankUp();
                 }
                 else if (turretsUpgradeList.Count >= 2)
                 {
@@ -172,7 +172,7 @@ public class PlayerManager : MonoBehaviour
                     {
                         if (turretsUpgradeList[i] == holder.curUpgrade)
                         {
-                            tempTurretsSlots[i].GetComponent<TurretManager>().turretRank += 1;
+                            tempTurretsSlots[i].GetComponent<TurretManager>().TurretRankUp();
                         }
                     }
                 }
