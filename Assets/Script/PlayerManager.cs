@@ -30,31 +30,28 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] float attackSpeed = 1;
     [SerializeField] int bulletPenNum = 0;
 
-    [Header("Finger")]
-    [SerializeField] Vector2 mousePos;
-    [SerializeField] GameObject fingerObject;
-    [SerializeField] Vector2 fingerDirection;
-
-    [Header("Turret")]
-    [SerializeField] float detectRange;
-    [SerializeField] GhostManager curTarget;
-    [SerializeField] LayerMask ghostLayer;
-    [SerializeField] GameObject bulletPrefab;
-    [SerializeField] float fireRate;
-    float fireCountdown;
-
     [Header("EXP")]
     [SerializeField] int curLevel;
     [SerializeField] float curExp;
     [SerializeField] float requiredExp;
     [SerializeField] GameObject skillSelectScreen;
 
+    [Header("Finger")]
+    [SerializeField] Vector2 mousePos;
+    [SerializeField] GameObject fingerObject;
+    [SerializeField] Vector2 fingerDirection;
+
     [Header("Upgrades")]
     [SerializeField] PlayerUpgradeListData listData;
-    [SerializeField] List<int> upgradeProgress = new List<int>();
-    [SerializeField] List<PlayerUpgradeData> curUpgrades = new List<PlayerUpgradeData>();
-    [SerializeField] GameObject[] playerUpgradeShows = new GameObject[8];
+    public List<PlayerUpgradeData> passiveUpgradeList = new List<PlayerUpgradeData>();
+    [SerializeField] List<int> passiveUpgradeProgress = new List<int>();
+    [SerializeField] GameObject[] playerPassiveShows = new GameObject[4];
 
+    [Header("Turret")]
+    [SerializeField] PlayerUpgradeData starterTurret;
+    [SerializeField] GameObject[] tempTurretsSlots;
+    public List<PlayerUpgradeData> turretsUpgradeList = new List<PlayerUpgradeData>();
+    [SerializeField] GameObject[] turretsShows = new GameObject[4];
     private void Awake()
     {
         curHealth = maxHealth;
@@ -65,8 +62,10 @@ public class PlayerManager : MonoBehaviour
         gameManager = GetComponentInParent<GameManager>();
         Time.timeScale = 0;
         startScreen.SetActive(true);
-        curUpgrades.Clear();
-        upgradeProgress.Clear();
+        passiveUpgradeList.Clear();
+        passiveUpgradeProgress.Clear();
+        turretsUpgradeList.Clear();
+        turretsUpgradeList.Add(starterTurret);
     }
     void Update()
     {
@@ -91,7 +90,6 @@ public class PlayerManager : MonoBehaviour
             abilityButton.SetActive(true);
         }
         TempGameManager();
-        //TurretManagment();
         FingerManagment();
         LevelManager();
         PlayerUpgradeStatus();
@@ -128,24 +126,54 @@ public class PlayerManager : MonoBehaviour
     }
     public void UpgradeSelection(UpgradeHolder holder) 
     {
-        if (!curUpgrades.Contains(holder.curUpgrade))
+        if (holder.curUpgrade.curType == UpgradeType.Passive)
         {
-            curUpgrades.Add(holder.curUpgrade);
-            upgradeProgress.Add(1);
-        }
-        else 
-        {
-            if (curUpgrades.Count == 1)
+            if (!passiveUpgradeList.Contains(holder.curUpgrade))
             {
-                upgradeProgress[0] += 1;
+                passiveUpgradeList.Add(holder.curUpgrade);
+                passiveUpgradeProgress.Add(1);
             }
-            else if (curUpgrades.Count >= 2)
+            else
             {
-                for (int i = 0; i <= curUpgrades.Count - 1; i++)
+                if (passiveUpgradeList.Count == 1)
                 {
-                    if (curUpgrades[i] == holder.curUpgrade) 
+                    passiveUpgradeProgress[0] += 1;
+                }
+                else if (passiveUpgradeList.Count >= 2)
+                {
+                    for (int i = 0; i <= passiveUpgradeList.Count - 1; i++)
                     {
-                        upgradeProgress[i] += 1;
+                        if (passiveUpgradeList[i] == holder.curUpgrade)
+                        {
+                            passiveUpgradeProgress[i] += 1;
+                        }
+                    }
+                }
+            }
+        }
+        else if (holder.curUpgrade.curType == UpgradeType.Turret) 
+        {
+            if (!turretsUpgradeList.Contains(holder.curUpgrade))
+            {
+                turretsUpgradeList.Add(holder.curUpgrade);
+                tempTurretsSlots[turretsUpgradeList.Count - 1].SetActive(true);
+                tempTurretsSlots[turretsUpgradeList.Count-1].GetComponent<TurretManager>().turretInfo = holder.curUpgrade.curTurretData;
+                tempTurretsSlots[turretsUpgradeList.Count-1].GetComponent<TurretManager>().turretRank = 1;
+            }
+            else
+            {
+                if (turretsUpgradeList.Count == 1)
+                {
+                    tempTurretsSlots[0].GetComponent<TurretManager>().turretRank += 1;
+                }
+                else if (turretsUpgradeList.Count >= 2)
+                {
+                    for (int i = 0; i <= turretsUpgradeList.Count - 1; i++)
+                    {
+                        if (turretsUpgradeList[i] == holder.curUpgrade)
+                        {
+                            tempTurretsSlots[i].GetComponent<TurretManager>().turretRank += 1;
+                        }
                     }
                 }
             }
@@ -155,50 +183,47 @@ public class PlayerManager : MonoBehaviour
     }
     public void PlayerUpgradeStatus() 
     {
-        if (curUpgrades.Count == 1)
+        if (passiveUpgradeList.Count == 1)
         {
-            playerUpgradeShows[0].SetActive(true);
-            playerUpgradeShows[0].GetComponentInChildren<TextMeshProUGUI>().text = upgradeProgress[0].ToString();
+            playerPassiveShows[0].SetActive(true);
+            playerPassiveShows[0].GetComponentInChildren<TextMeshProUGUI>().text = passiveUpgradeProgress[0].ToString();
         }
-        else if (curUpgrades.Count >= 2)
+        else if (passiveUpgradeList.Count >= 2)
         {
-            for (int i = 0; i <= curUpgrades.Count - 1; i++)
+            for (int i = 0; i <= passiveUpgradeList.Count - 1; i++)
             {
-                playerUpgradeShows[i].SetActive(true);
-                playerUpgradeShows[i].GetComponentInChildren<TextMeshProUGUI>().text = upgradeProgress[i].ToString();
+                playerPassiveShows[i].SetActive(true);
+                playerPassiveShows[i].GetComponentInChildren<TextMeshProUGUI>().text = passiveUpgradeProgress[i].ToString();
             }
         }
         else
         {
-            foreach (GameObject upgradeIcon in playerUpgradeShows)
+            foreach (GameObject upgradeIcon in playerPassiveShows)
             {
                 upgradeIcon.SetActive(false);
             }
         }
 
-        //技能生效
-        foreach (PlayerUpgradeData upgrade in curUpgrades) 
+        if (turretsUpgradeList.Count == 1)
         {
-            
+            turretsShows[0].SetActive(true);
+            turretsShows[0].GetComponentInChildren<TextMeshProUGUI>().text = tempTurretsSlots[0].GetComponent<TurretManager>().turretRank.ToString();
         }
-    }
-
-    public void TurretManagment() 
-    {
-        //if (!curTarget)
-        //{
-        //    GhostDetect();
-        //}
-        //else 
-        //{
-        //    if (curTarget.isDestroying) curTarget = null;
-        //    if (fireCountdown <= 0)
-        //    {
-        //        TurretShoot();
-        //        fireCountdown = 1 / (fireRate * attackSpeed);
-        //    }
-        //    fireCountdown -= Time.deltaTime;
-        //}
+        else if (turretsUpgradeList.Count >= 2)
+        {
+            for (int i = 0; i <= turretsUpgradeList.Count - 1; i++)
+            {
+                turretsShows[i].SetActive(true);
+                turretsShows[i].GetComponentInChildren<TextMeshProUGUI>().text = tempTurretsSlots[i].GetComponent<TurretManager>().turretRank.ToString();
+            }
+        }
+        else
+        {
+            foreach (GameObject upgradeIcon in turretsShows)
+            {
+                upgradeIcon.SetActive(false);
+            }
+        }
     }
     public void FingerManagment() 
     {
@@ -307,65 +332,6 @@ public class PlayerManager : MonoBehaviour
             fingerObject.transform.right = fingerDirection;
         }
     }
-    public void GhostDetect() 
-    {
-        //var ghosts = Physics2D.OverlapCircleAll(transform.position, detectRange, ghostLayer);
-        //foreach (var ghost in ghosts) 
-        //{
-        //    ghostInRange.Add(ghost.gameObject);
-        //}
-        GameObject[] ghosts = GameObject.FindGameObjectsWithTag("Ghost");
-        float shortestDistance = Mathf.Infinity;
-        foreach (GameObject ghost in ghosts) 
-        {
-            float distance = Vector2.Distance(transform.position, ghost.transform.position);
-            if (distance < shortestDistance) 
-            {
-                shortestDistance = distance;
-                curTarget = ghost.GetComponent<GhostManager>();
-            }
-        }
-
-    }
-    public void TurretShoot() 
-    {
-        if (curTarget) 
-        {
-            if (bulletNum <= 1)
-            {
-                bulletNum = 1;
-                GameObject bullet = Instantiate(bulletPrefab, transform.position, transform.rotation);
-                bullet.GetComponent<BulletManager>().bulletDamage *= attackDamage;
-                bullet.GetComponent<BulletManager>().bulletPenHealth = bulletPenNum;
-                Vector2 dir = new Vector2(curTarget.transform.position.x - transform.position.x, curTarget.transform.position.y - transform.position.y);
-                dir.Normalize();
-                bullet.GetComponent<Rigidbody2D>().AddForce(dir * 200f);
-                Destroy(bullet, 2f);
-            }
-            else 
-            {
-                float bulletAngle = 15f;
-                int median = bulletNum / 2;
-                for (int i = 0; i < bulletNum; i++) 
-                {
-                    GameObject bullet = Instantiate(bulletPrefab, transform.position, transform.rotation);
-                    bullet.GetComponent<BulletManager>().bulletDamage *= attackDamage;
-                    bullet.GetComponent<BulletManager>().bulletPenHealth = bulletPenNum;
-                    Vector2 dir = new Vector2(curTarget.transform.position.x - transform.position.x, curTarget.transform.position.y - transform.position.y);
-
-                    if (bulletNum % 2 == 1)
-                    {
-                        bullet.GetComponent<BulletManager>().SetSpeed(Quaternion.AngleAxis(bulletAngle*(i- median),Vector3.forward) * dir);
-                    }
-                    else 
-                    {
-                        bullet.GetComponent<BulletManager>().SetSpeed(Quaternion.AngleAxis(bulletAngle * (i - median) + bulletAngle/2, Vector3.forward) * dir);
-                    }
-                    Destroy(bullet, 2f);
-                }
-            }
-        }
-    }
     public void GameRestart() 
     {
         Time.timeScale = 1;
@@ -374,8 +340,10 @@ public class PlayerManager : MonoBehaviour
         curHealth = maxHealth;
         curEnergy = 0;
         startScreen.SetActive(false);
-        upgradeProgress.Clear();
-        curUpgrades.Clear();
+        passiveUpgradeList.Clear();
+        passiveUpgradeProgress.Clear();
+        turretsUpgradeList.Clear();
+        turretsUpgradeList.Add(starterTurret);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {

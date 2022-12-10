@@ -14,6 +14,8 @@ public class TurretManager : MonoBehaviour
     [SerializeField] Transform turretGO;
 
     [Header("TurretStats")]
+    public TurretInfoData turretInfo;
+    public int turretRank = 1;
     [SerializeField] float rotateSpeed = -0.75f;
     [SerializeField] float fovRadius;
     [Range(1, 360)][SerializeField] float fovAngle = 45f;
@@ -35,6 +37,15 @@ public class TurretManager : MonoBehaviour
 
     void Update()
     {
+        if (turretInfo == null)
+        {
+            this.gameObject.SetActive(false);
+        }
+        else 
+        {
+            this.gameObject.SetActive(true);
+        }
+
         TurretMoving();
         StartCoroutine(FOVCheck());
         TurretShooting();
@@ -88,7 +99,6 @@ public class TurretManager : MonoBehaviour
         transform.right = turretDirection;
 
     }
-
     void TurretShooting()
     {
         if (!curTarget || ammoNum <= 0) return;
@@ -145,7 +155,6 @@ public class TurretManager : MonoBehaviour
             FOV();
         }
     }
-
     private void FOV()
     {
         if (fireTimer > 0 ) return;
@@ -170,5 +179,9 @@ public class TurretManager : MonoBehaviour
                 }
             }
         }
+    }
+    private void TurretRankManager() 
+    {
+    
     }
 }

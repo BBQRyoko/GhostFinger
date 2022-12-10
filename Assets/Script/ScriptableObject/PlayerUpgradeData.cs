@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class PlayerUpgradeData : ScriptableObject
 {
     public int upgradeIndex;  //总类目录
-    public UpgradeType curType; //类型目录: 1-自身 2-子弹 3-手指 4-场地
+    public UpgradeType curType; //类型目录: 1-自身 2-炮台 3-手指 4-场地
     public Image upgradeIcon;
     public string upgradeName;
     public string upgradeDescription;
@@ -19,7 +19,8 @@ public class PlayerUpgradeData : ScriptableObject
     public float fireRateChange = 0f;
     public int targetNum;
 
-    [Header("子弹相关")]
+    [Header("炮台相关")]
+    public TurretInfoData curTurretData;
     public int bulletNumChange = 0;
     public float bulletDamageChange = 0f;
     public bool canChaseTarget = false;
@@ -31,5 +32,5 @@ public class PlayerUpgradeData : ScriptableObject
     public float[] effectNumberByLevel = new float[6];
 }
 
-public enum UpgradeType {Self,Bullet,Finger};
+public enum UpgradeType {Passive,Turret};
 public enum ElementType {Normal,Fire,Ice,Elect};

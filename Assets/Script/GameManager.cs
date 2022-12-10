@@ -12,7 +12,39 @@ public class GameManager : MonoBehaviour
         List<PlayerUpgradeData> tempUprades = new List<PlayerUpgradeData>();
         foreach (PlayerUpgradeData upgrade in curUpgradeList.upgradeList) 
         {
-            tempUprades.Add(upgrade);
+            PlayerManager playerManager = FindObjectOfType<PlayerManager>();
+            if (upgrade.curType == UpgradeType.Turret)
+            {
+                if (playerManager.turretsUpgradeList.Count >= 4)
+                {
+                    if (playerManager.turretsUpgradeList.Contains(upgrade))
+                    {
+                        tempUprades.Add(upgrade);
+                    }
+                }
+                else
+                {
+                    tempUprades.Add(upgrade);
+                }
+            }
+            else if (upgrade.curType == UpgradeType.Passive)
+            {
+                if (playerManager.passiveUpgradeList.Count == 4)
+                {
+                    if (playerManager.passiveUpgradeList.Contains(upgrade))
+                    {
+                        tempUprades.Add(upgrade);
+                    }
+                }
+                else
+                {
+                    tempUprades.Add(upgrade);
+                }
+            }
+            else 
+            {
+                tempUprades.Add(upgrade);
+            }
         }
         for (int i = 0; i <= upgradeSlots.Length-1; i++) 
         {

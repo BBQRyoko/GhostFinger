@@ -13,7 +13,25 @@ MonoBehaviour:
   m_Name: 05Something
   m_EditorClassIdentifier: 
   upgradeIndex: 5
-  upgradeType: 0
+  curType: 0
   upgradeIcon: {fileID: 0}
   upgradeName: Something
   upgradeDescription: 
+  curElement: 0
+  requiredFireTimes: 0
+  effectRadius: 0
+  fireRateChange: 0
+  targetNum: 0
+  curTurretData: {fileID: 0}
+  bulletNumChange: 0
+  bulletDamageChange: 0
+  canChaseTarget: 0
+  isPet: 0
+  petDamageChange: 0
+  effectNumberByLevel:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
