@@ -12,19 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2904545f94edeb445b65de20086b90ea, type: 3}
   m_Name: DefaultTurret
   m_EditorClassIdentifier: 
-  rotateSpeed: -0.75
+  rotateSpeed: 1.25
   fovRadius: 3
-  fovAngle: 45
+  fovAngle: 30
   bulletNum: 1
-  defaultFireTimer: 1.2
-  defaultShootingPause: 0.05
-  bulletPrefab: {fileID: 0}
+  defaultFireTimer: 1.25
+  defaultShootingPause: 1
+  bulletPrefab: {fileID: 6481412890079145689, guid: dca85848cab8bc545b9743f40c5e9a36, type: 3}
+  bulletSpeed: 0.75
   canExplode: 0
-  autoTarget: 1
-  canPenetrate: 0
-  defaultLifeTime: 0
+  autoTarget: 0
+  canPenetrate: 1
   attackDamage: 1
   explodeDamage: 0
+  deflectNum: 0
   upgradeList: 00000000020000000400000000000000
   upgradeEffectNum:
   - 0

@@ -20,8 +20,6 @@ public class WaveManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI waveText;
 
     [Header("TempSpawnRule")]
-    [SerializeField] TextAsset tempSpawnRuleData;
-    public string[] data;
     [SerializeField] MapRoundData mapRounds;
 
     [Header("GameobjectHolders")]

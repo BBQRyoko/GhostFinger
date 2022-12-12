@@ -12,11 +12,12 @@ public class TurretInfoData : ScriptableObject
     public float defaultFireTimer, defaultShootingPause = 0.05f;
 
     [Header("BulletRelated")]
-    public BulletManager bulletPrefab;
+    public GameObject bulletPrefab;
+    public float bulletSpeed;
     public bool canExplode, autoTarget, canPenetrate;
-    [Range(0, 2)]public float defaultLifeTime;
     public float attackDamage;
     public float explodeDamage;
+    public int deflectNum;
 
     [Header("Upgrade")]
     public TurretUpgradeType[] upgradeList;

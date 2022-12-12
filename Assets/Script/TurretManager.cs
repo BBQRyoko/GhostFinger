@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TurretManager : MonoBehaviour
 {
@@ -8,7 +9,6 @@ public class TurretManager : MonoBehaviour
     [SerializeField] BulletPool bulletPool;
     float timerCounter = 0;
     float rotateRadius;
-    [SerializeField] GameObject turretRef;
     public LayerMask targetLayer;
     public GhostManager curTarget;
     [SerializeField] Transform turretGO;
@@ -27,14 +27,16 @@ public class TurretManager : MonoBehaviour
     float shootingTimer;
 
     [Header("BulletStats")]
+    [SerializeField] GameObject bulletGO;
     [SerializeField] float bulletSpeed;
     [SerializeField] float bulletDamage, bulletExplodeDamage;
     [SerializeField] bool bulletExplode, bulletAuto, bulletPentrate;
-    [SerializeField] int bulletDefectNum;
+    [SerializeField] int bulletDeflectNum;
 
     private void Awake()
     {
         bulletPool = GetComponentInParent<BulletPool>();
+        if (turretInfo != null) TurretSetUp();
     }
     void Start()
     {
@@ -91,7 +93,20 @@ public class TurretManager : MonoBehaviour
     }
     public void TurretSetUp() 
     {
-    
+        rotateSpeed = turretInfo.rotateSpeed;
+        fovRadius = turretInfo.fovRadius;
+        fovAngle = turretInfo.fovAngle;
+        bulletNum = turretInfo.bulletNum;
+        defaultFireTimer = turretInfo.defaultFireTimer;
+        defaultShootingPause = turretInfo.defaultShootingPause;
+        bulletGO = turretInfo.bulletPrefab;
+        bulletSpeed = turretInfo.bulletSpeed;
+        bulletDamage = turretInfo.attackDamage;
+        bulletExplodeDamage = turretInfo.explodeDamage;
+        bulletExplode = turretInfo.canExplode;
+        bulletAuto = turretInfo.autoTarget;
+        bulletPentrate = turretInfo.canPenetrate;
+        bulletDeflectNum = turretInfo.deflectNum;
     }
     private void TurretMoving()
     {
@@ -219,13 +234,16 @@ public class TurretManager : MonoBehaviour
     }
     public void BulletSetUp(BulletManager bullet) 
     {
+        bullet.GetComponent<SpriteRenderer>().sprite = bulletGO.GetComponent<SpriteRenderer>().sprite;
+        bullet.transform.localScale = bulletGO.transform.localScale;
+        bullet.transform.rotation = bulletGO.transform.rotation;
         bullet.transform.position = turretGO.position;
         bullet.bulletDamage = bulletDamage; //之后还要加上玩家本身的数值计算
         bullet.speed = bulletSpeed;
         bullet.canExplode = bulletExplode;
         bullet.autoTarget = bulletAuto;
         bullet.penetrate = bulletPentrate;
-        bullet.deflectNum = bulletDefectNum;
+        bullet.deflectNum = bulletDeflectNum;
         bullet.explosionDamamge = bulletExplodeDamage;
     }
 }
