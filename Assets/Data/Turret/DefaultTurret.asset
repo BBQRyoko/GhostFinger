@@ -18,7 +18,13 @@ MonoBehaviour:
   bulletNum: 1
   defaultFireTimer: 1.2
   defaultShootingPause: 0.05
+  bulletPrefab: {fileID: 0}
+  canExplode: 0
+  autoTarget: 1
+  canPenetrate: 0
+  defaultLifeTime: 0
   attackDamage: 1
+  explodeDamage: 0
   upgradeList: 00000000020000000400000000000000
   upgradeEffectNum:
   - 0

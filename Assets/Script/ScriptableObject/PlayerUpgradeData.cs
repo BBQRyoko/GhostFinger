@@ -13,23 +13,14 @@ public class PlayerUpgradeData : ScriptableObject
     public string upgradeDescription;
     public ElementType curElement = ElementType.Normal;
 
-    [Header("自身相关")]
+    [Header("被动相关")]
     public int requiredFireTimes = 0;
     public int effectRadius = 0;
     public float fireRateChange = 0f;
-    public int targetNum;
+    public float[] effectNumberByLevel = new float[6];
 
     [Header("炮台相关")]
     public TurretInfoData curTurretData;
-    public int bulletNumChange = 0;
-    public float bulletDamageChange = 0f;
-    public bool canChaseTarget = false;
-
-    [Header("场地相关")]
-    public bool isPet;
-    public float petDamageChange = 0f;
-
-    public float[] effectNumberByLevel = new float[6];
 }
 
 public enum UpgradeType {Passive,Turret};

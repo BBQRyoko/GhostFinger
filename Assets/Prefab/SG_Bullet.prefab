@@ -12,14 +12,14 @@ GameObject:
   - component: {fileID: 8932321834046040608}
   - component: {fileID: 1621013185503219874}
   - component: {fileID: 1746034839803523276}
-  - component: {fileID: 1674575649820490297}
-  m_Layer: 0
+  - component: {fileID: 249981654757478561}
+  m_Layer: 10
   m_Name: SG_Bullet
   m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4384260968375333110
 Transform:
   m_ObjectHideFlags: 0
@@ -97,7 +97,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -123,8 +123,8 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
---- !u!114 &1674575649820490297
+  m_Constraints: 4
+--- !u!114 &249981654757478561
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -133,11 +133,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 6481412890079145689}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c0156f566e8e1d4bb4051f44b2eecbe, type: 3}
+  m_Script: {fileID: 11500000, guid: ca6bc85c155a7104e9b9ed3b15a50114, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletDamage: 10
+  bulletDamage: 2
+  explosionDamamge: 10
   speed: 2
-  bulletPenHealth: 0
-  bulletKnockOff: 0
-  bulletBounce: 0
+  canExplode: 0
+  autoTarget: 0
+  penetrate: 0
+  deflectNum: 1
+  explosion: {fileID: 1640370103624447652, guid: a6e04c374d741dc46b2f1f92d3be906a, type: 3}

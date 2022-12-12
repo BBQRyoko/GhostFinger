@@ -151,30 +151,21 @@ public class GhostManager : MonoBehaviour
         gameObject.transform.localScale = new Vector3(0.12f, 0.12f, 0.12f);
         agent.speed = ghostSp;
     }
+    public void DamageTaken(float damage) 
+    {
+        ghostHp -= damage;
+        if (ghostHp <= 0)
+        {
+            var exp = expPool.expPrefabPool.Get();
+            exp.transform.position = transform.position;
+        }
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
             player.curHealth -= 10;
             GhostRemove();
-        }
-        else if (collision.gameObject.CompareTag("Bullet")) 
-        {
-            ghostHp -= collision.GetComponent<BulletManager>().bulletDamage;
-            if (ghostHp <= 0) 
-            {
-                var exp = expPool.expPrefabPool.Get();
-                exp.transform.position = transform.position;
-            }
-            if (collision.GetComponent<BulletManager>().bulletPenHealth > 0) 
-            {
-                collision.GetComponent<BulletManager>().bulletPenHealth -= 1;
-            }
-            else
-            {
-                BulletPool bulletPool = player.GetComponent<BulletPool>();
-                bulletPool.bulletPrefabPool.Release(collision.gameObject);
-            }
         }
     }
 }

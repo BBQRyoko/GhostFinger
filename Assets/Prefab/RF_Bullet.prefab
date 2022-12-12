@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1621013185503219874}
   - component: {fileID: 1746034839803523276}
   - component: {fileID: 1674575649820490297}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: RF_Bullet
   m_TagString: Bullet
   m_Icon: {fileID: 0}
@@ -136,8 +136,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c0156f566e8e1d4bb4051f44b2eecbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  curTarget: {fileID: 0}
   bulletDamage: 1
+  explodeDamage: 0
   speed: 5
-  bulletPenHealth: 0
-  bulletKnockOff: 0
-  bulletBounce: 0
+  canExplode: 0
+  autoTarget: 0
+  penetrate: 0
+  defaultLifeTime: 0
+  deflectNum: 0

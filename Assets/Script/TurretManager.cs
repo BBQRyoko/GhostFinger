@@ -20,11 +20,17 @@ public class TurretManager : MonoBehaviour
     [SerializeField] float fovRadius;
     [Range(1, 360)][SerializeField] float fovAngle = 45f;
     [SerializeField] int bulletNum;
-    [SerializeField] float defaultFireTimer, defaultShootingPause = 0.05f, attackDamage;
+    [SerializeField] float defaultFireTimer, defaultShootingPause = 0.05f;
     int ammoNum;
     int defaultAmmo = 1;
     float fireTimer;
     float shootingTimer;
+
+    [Header("BulletStats")]
+    [SerializeField] float bulletSpeed;
+    [SerializeField] float bulletDamage, bulletExplodeDamage;
+    [SerializeField] bool bulletExplode, bulletAuto, bulletPentrate;
+    [SerializeField] int bulletDefectNum;
 
     private void Awake()
     {
@@ -34,7 +40,6 @@ public class TurretManager : MonoBehaviour
     {
         rotateRadius = Mathf.Abs(Vector2.Distance(transform.position, playerManager.transform.position));
     }
-
     void Update()
     {
         if (turretInfo == null)
@@ -64,6 +69,7 @@ public class TurretManager : MonoBehaviour
 
         if (fireTimer > 0)
         {
+            curTarget = null;
             if (shootingTimer <= 0)
             {
                 fireTimer -= Time.deltaTime;
@@ -82,6 +88,10 @@ public class TurretManager : MonoBehaviour
                 curTarget = null;
             }
         }
+    }
+    public void TurretSetUp() 
+    {
+    
     }
     private void TurretMoving()
     {
@@ -109,11 +119,11 @@ public class TurretManager : MonoBehaviour
             {
                 bulletNum = 1;
                 GameObject bullet = bulletPool.bulletPrefabPool.Get();
-                bullet.transform.position = turretGO.position;
-                bullet.GetComponent<BulletManager>().bulletDamage *= attackDamage;
+                BulletSetUp(bullet.GetComponent<BulletManager>());
                 Vector2 dir = new Vector2(curTarget.transform.position.x - transform.position.x, curTarget.transform.position.y - transform.position.y);
                 dir.Normalize();
-                bullet.GetComponent<Rigidbody2D>().AddForce(dir * 200f);
+                bullet.transform.right = dir;
+                bullet.GetComponent<BulletManager>().SetSpeed(dir);
             }
             else
             {
@@ -122,10 +132,10 @@ public class TurretManager : MonoBehaviour
                 for (int i = 0; i < bulletNum; i++)
                 {
                     GameObject bullet = bulletPool.bulletPrefabPool.Get();
-                    bullet.transform.position = turretGO.position;
-                    bullet.GetComponent<BulletManager>().bulletDamage *= attackDamage;
+                    BulletSetUp(bullet.GetComponent<BulletManager>());
                     Vector2 dir = new Vector2(curTarget.transform.position.x - transform.position.x, curTarget.transform.position.y - transform.position.y);
-
+                    dir.Normalize();
+                    bullet.transform.right = dir;
                     if (bulletNum % 2 == 1)
                     {
                         bullet.GetComponent<BulletManager>().SetSpeed(Quaternion.AngleAxis(bulletAngle * (i - median), Vector3.forward) * dir);
@@ -182,22 +192,40 @@ public class TurretManager : MonoBehaviour
     public void TurretRankUp() 
     {
         turretRank += 1;
-        
-        if (turretRank == 2)
+        if (turretInfo.upgradeList[turretRank - 2] == TurretUpgradeType.RotateSpeed)
         {
-
+            rotateSpeed = turretInfo.upgradeEffectNum[turretRank - 2];
         }
-        else if (turretRank == 3)
+        else if (turretInfo.upgradeList[turretRank - 2] == TurretUpgradeType.FovRadius) 
         {
-
+            fovRadius = turretInfo.upgradeEffectNum[turretRank - 2];
         }
-        else if (turretRank == 4)
+        else if (turretInfo.upgradeList[turretRank - 2] == TurretUpgradeType.BulletNum)
         {
-
+            bulletNum = (int)turretInfo.upgradeEffectNum[turretRank - 2];
         }
-        else if (turretRank == 5) 
+        else if (turretInfo.upgradeList[turretRank - 2] == TurretUpgradeType.FireTimer)
         {
-        
+            fireTimer = turretInfo.upgradeEffectNum[turretRank - 2];
         }
+        else if (turretInfo.upgradeList[turretRank - 2] == TurretUpgradeType.AttackDamage)
+        {
+            bulletDamage = turretInfo.upgradeEffectNum[turretRank - 2];
+        }
+        else if (turretInfo.upgradeList[turretRank - 2] == TurretUpgradeType.TurretNum)
+        {
+            //Later
+        }
+    }
+    public void BulletSetUp(BulletManager bullet) 
+    {
+        bullet.transform.position = turretGO.position;
+        bullet.bulletDamage = bulletDamage; //之后还要加上玩家本身的数值计算
+        bullet.speed = bulletSpeed;
+        bullet.canExplode = bulletExplode;
+        bullet.autoTarget = bulletAuto;
+        bullet.penetrate = bulletPentrate;
+        bullet.deflectNum = bulletDefectNum;
+        bullet.explosionDamamge = bulletExplodeDamage;
     }
 }
