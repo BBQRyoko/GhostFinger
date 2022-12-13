@@ -10,7 +10,7 @@ public class GeneralDamager : MonoBehaviour
     {
         if (collision.gameObject.tag == "Ghost") 
         {
-            collision.gameObject.GetComponent<GhostManager>().DamageTaken(damage);
+            collision.gameObject.GetComponent<GhostManager>().DamageTaken(damage, ElementType.Normal);
         }
     }
 }

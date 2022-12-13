@@ -49,7 +49,7 @@ public class PlayerManager : MonoBehaviour
 
     [Header("Turret")]
     [SerializeField] PlayerUpgradeData starterTurret;
-    [SerializeField] GameObject[] tempTurretsSlots;
+    public GameObject[] tempTurretsSlots;
     public List<PlayerUpgradeData> turretsUpgradeList = new List<PlayerUpgradeData>();
     [SerializeField] GameObject[] turretsShows = new GameObject[4];
     private void Awake()
@@ -113,7 +113,7 @@ public class PlayerManager : MonoBehaviour
     public void LevelManager() 
     {
         //改经验值的地方
-        requiredExp = (curLevel + 1) * (curLevel + 2);
+        requiredExp = (curLevel + 1) * (curLevel + 1);
         if (curExp >= requiredExp) 
         {
             float overExp = curExp - requiredExp;
@@ -159,6 +159,7 @@ public class PlayerManager : MonoBehaviour
                 tempTurretsSlots[turretsUpgradeList.Count - 1].SetActive(true);
                 tempTurretsSlots[turretsUpgradeList.Count-1].GetComponent<TurretManager>().turretInfo = holder.curUpgrade.curTurretData;
                 tempTurretsSlots[turretsUpgradeList.Count-1].GetComponent<TurretManager>().turretRank = 1;
+                tempTurretsSlots[turretsUpgradeList.Count - 1].GetComponent<TurretManager>().TurretSetUp();
             }
             else
             {

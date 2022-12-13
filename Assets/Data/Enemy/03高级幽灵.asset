@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sprite: {fileID: 21300000, guid: 771a7dd7023a1ec4f872f464b8cd841f, type: 3}
   enemyDamage: 2
-  enemyHealth: 4
-  enemySpeed: 0.35
+  enemyHealth: 5
+  enemySpeed: 1.2
   enemyWeight: 1
   enemyDropIndex: 1
   enemyAbilities: 0100000000

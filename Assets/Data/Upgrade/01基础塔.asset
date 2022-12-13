@@ -10,23 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 223652c925f776141b2c8a31c9318543, type: 3}
-  m_Name: "00\u57FA\u7840\u5854"
+  m_Name: "01\u57FA\u7840\u5854"
   m_EditorClassIdentifier: 
-  upgradeIndex: 0
-  curType: 0
+  upgradeIndex: 1
+  curType: 1
   upgradeIcon: {fileID: 0}
-  upgradeName: Bullet Penetrate
+  upgradeName: Regular
   upgradeDescription: 
   curElement: 0
   requiredFireTimes: 0
   effectRadius: 0
   fireRateChange: 0
-  targetNum: 0
-  bulletNumChange: 0
-  bulletDamageChange: 0
-  canChaseTarget: 0
-  isPet: 0
-  petDamageChange: 0
   effectNumberByLevel:
   - 0
   - 0
@@ -34,3 +28,4 @@ MonoBehaviour:
   - 0
   - 0
   - 0
+  curTurretData: {fileID: 11400000, guid: 9ce23c56b1665954f9af5fa87393ce68, type: 2}

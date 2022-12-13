@@ -32,6 +32,7 @@ public class GhostManager : MonoBehaviour
     public bool isElected;
     public bool isFired;
     public bool isFreezed;
+    float debuffTimer;
 
     //Enemy Ability
 
@@ -46,7 +47,6 @@ public class GhostManager : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         agent.updateUpAxis = false;
         agent.updateRotation = false;
-        //GhostInitialize();
     }
     void Update()
     {
@@ -54,25 +54,6 @@ public class GhostManager : MonoBehaviour
         GhostMovement();
         GhostDebuffManager();
         //¼¼ÄÜ¼ì²â
-    }
-    public void GhostInitialize() 
-    {
-        ghostHp = enemyInfo.enemyHealth;
-        ghostSp = enemyInfo.enemySpeed;
-        ghostDamage = enemyInfo.enemyDamage;
-        //weight ...
-        ghostDrop = enemyInfo.enemyDropIndex;
-        for (int i = 0; i <= abilityList.Count - 1; i++) 
-        {
-            abilityList[i] = enemyInfo.enemyAbilities[i];
-        }
-        agent.speed *= ghostSp;
-    }
-    public void GhostSpeedSet(int wave) 
-    {
-        float random = Random.Range(-0.25f, 1.25f);
-        ghostSp = (wave - 1) * 0.25f + 1.5f + random;
-        
     }
     void GhostDebuffManager() 
     {
@@ -86,11 +67,13 @@ public class GhostManager : MonoBehaviour
         }
         else if (isFreezed)
         {
+            agent.speed = (ghostSp * 0.4f) / 2;
             sp.color = new Color(0.5f, 1, 1);
         }
         else 
         {
             sp.color = new Color(1, 1, 1);
+            agent.speed = (ghostSp * 0.4f);
         }
     }
     void GhostStatus() 
@@ -116,6 +99,16 @@ public class GhostManager : MonoBehaviour
             gameObject.transform.DORotate(new Vector3(0, 0, 360), 0.75f, RotateMode.FastBeyond360).SetEase(Ease.OutQuad);
             gameObject.transform.DOScale(new Vector3(0.06f, 0.06f, 0.06f), 0.5f).SetEase(Ease.OutQuad).OnComplete(() => GhostRemove());
         }
+        if (debuffTimer > 0)
+        {
+            debuffTimer -= Time.deltaTime;
+        }
+        else 
+        {
+            isFreezed = false;
+            isFired = false;
+            isElected = false;
+        }
     }
     void GhostMovement() 
     {
@@ -134,6 +127,8 @@ public class GhostManager : MonoBehaviour
         enemyPool.ghostPrefabPool.Release(this);
         ghostHp = enemyInfo.enemyHealth;
         gameObject.transform.localScale = new Vector3(0.12f, 0.12f, 0.12f);
+        isFreezed = false;
+        debuffTimer = 0;
         isDestroying = false;
     }
     public void EnemyInfoImport(EnemyInfoData enemyData) 
@@ -149,11 +144,16 @@ public class GhostManager : MonoBehaviour
             abilityList[i] = enemyData.enemyAbilities[i];
         }
         gameObject.transform.localScale = new Vector3(0.12f, 0.12f, 0.12f);
-        agent.speed = ghostSp;
+        agent.speed = ghostSp * 0.4f;
     }
-    public void DamageTaken(float damage) 
+    public void DamageTaken(float damage, ElementType type) 
     {
         ghostHp -= damage;
+        if (type == ElementType.Ice) 
+        {
+            debuffTimer = 3f;
+            isFreezed = true;
+        }
         if (ghostHp <= 0)
         {
             var exp = expPool.expPrefabPool.Get();
@@ -164,7 +164,7 @@ public class GhostManager : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            player.curHealth -= 10;
+            player.curHealth -= ghostDamage;
             GhostRemove();
         }
     }

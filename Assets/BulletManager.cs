@@ -8,9 +8,11 @@ public class BulletManager : MonoBehaviour
     [Header("×Óµ¯ÊôÐÔ")]
     public float bulletDamage = 1f;
     public float explosionDamamge = 5f;
+    [Range(1,2)] public float explosionRadius = 1f;
     public float speed = 2f;
     public bool canExplode, autoTarget, penetrate;
     public int deflectNum;
+    public ElementType bulletElement = ElementType.Normal;
     [SerializeField] GameObject explosion;
 
     private void Awake()
@@ -41,7 +43,7 @@ public class BulletManager : MonoBehaviour
         }
         else if (collision.gameObject.tag == "Ghost") 
         {
-            collision.gameObject.GetComponent<GhostManager>().DamageTaken(bulletDamage);
+            collision.gameObject.GetComponent<GhostManager>().DamageTaken(bulletDamage, bulletElement);
         }
     }
 
@@ -52,7 +54,7 @@ public class BulletManager : MonoBehaviour
         {
             if (!penetrate)
             {
-                collision.gameObject.GetComponent<GhostManager>().DamageTaken(bulletDamage);
+                collision.gameObject.GetComponent<GhostManager>().DamageTaken(bulletDamage, bulletElement);
                 if (deflectNum > 0)
                 {
                     var direction = Vector3.Reflect(rigidbody.velocity.normalized, collision.contacts[0].normal);
@@ -65,6 +67,8 @@ public class BulletManager : MonoBehaviour
                     {
                         var explosionArea = Instantiate(explosion, transform);
                         explosionArea.transform.parent = null;
+                        var radius = explosionArea.transform.localScale.x;
+                        explosionArea.transform.localScale = new Vector3(radius, radius, radius) * explosionRadius;
                         explosionArea.GetComponent<GeneralDamager>().damage = explosionDamamge;
                         Destroy(explosionArea, 0.75f);
                     }

@@ -17,11 +17,13 @@ public class TurretInfoData : ScriptableObject
     public bool canExplode, autoTarget, canPenetrate;
     public float attackDamage;
     public float explodeDamage;
+    [Range(1,2)]public float explosionRadius;
     public int deflectNum;
+    public ElementType bulletElement;
 
     [Header("Upgrade")]
     public TurretUpgradeType[] upgradeList;
     public float[] upgradeEffectNum;
 }
 
-public enum TurretUpgradeType {RotateSpeed, FovRadius, BulletNum, FireTimer, AttackDamage, TurretNum};
+public enum TurretUpgradeType {RotateSpeed, FovRadius, BulletNum, FireTimer, ShootingPause, AttackDamage, TurretNum, ExplosionRadius, ExplosionDamage, DeflectNum, BulletSpeed, Penetrate};

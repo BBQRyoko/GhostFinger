@@ -30,8 +30,10 @@ public class TurretManager : MonoBehaviour
     [SerializeField] GameObject bulletGO;
     [SerializeField] float bulletSpeed;
     [SerializeField] float bulletDamage, bulletExplodeDamage;
+    [Range(1, 2)][SerializeField] float explosionRadius;
     [SerializeField] bool bulletExplode, bulletAuto, bulletPentrate;
     [SerializeField] int bulletDeflectNum;
+    [SerializeField] ElementType element;
 
     private void Awake()
     {
@@ -103,10 +105,12 @@ public class TurretManager : MonoBehaviour
         bulletSpeed = turretInfo.bulletSpeed;
         bulletDamage = turretInfo.attackDamage;
         bulletExplodeDamage = turretInfo.explodeDamage;
+        explosionRadius = turretInfo.explosionRadius;
         bulletExplode = turretInfo.canExplode;
         bulletAuto = turretInfo.autoTarget;
         bulletPentrate = turretInfo.canPenetrate;
         bulletDeflectNum = turretInfo.deflectNum;
+        element = turretInfo.bulletElement;
     }
     private void TurretMoving()
     {
@@ -211,7 +215,7 @@ public class TurretManager : MonoBehaviour
         {
             rotateSpeed = turretInfo.upgradeEffectNum[turretRank - 2];
         }
-        else if (turretInfo.upgradeList[turretRank - 2] == TurretUpgradeType.FovRadius) 
+        else if (turretInfo.upgradeList[turretRank - 2] == TurretUpgradeType.FovRadius)
         {
             fovRadius = turretInfo.upgradeEffectNum[turretRank - 2];
         }
@@ -221,11 +225,35 @@ public class TurretManager : MonoBehaviour
         }
         else if (turretInfo.upgradeList[turretRank - 2] == TurretUpgradeType.FireTimer)
         {
-            fireTimer = turretInfo.upgradeEffectNum[turretRank - 2];
+            defaultFireTimer = turretInfo.upgradeEffectNum[turretRank - 2];
         }
         else if (turretInfo.upgradeList[turretRank - 2] == TurretUpgradeType.AttackDamage)
         {
             bulletDamage = turretInfo.upgradeEffectNum[turretRank - 2];
+        }
+        else if (turretInfo.upgradeList[turretRank - 2] == TurretUpgradeType.BulletSpeed) 
+        {
+            bulletSpeed = turretInfo.upgradeEffectNum[turretRank - 2];
+        }
+        else if (turretInfo.upgradeList[turretRank - 2] == TurretUpgradeType.ExplosionDamage)
+        {
+            bulletExplodeDamage = turretInfo.upgradeEffectNum[turretRank - 2];
+        }
+        else if (turretInfo.upgradeList[turretRank - 2] == TurretUpgradeType.ExplosionRadius)
+        {
+            explosionRadius = turretInfo.upgradeEffectNum[turretRank - 2];
+        }
+        else if (turretInfo.upgradeList[turretRank - 2] == TurretUpgradeType.ShootingPause)
+        {
+            defaultShootingPause = turretInfo.upgradeEffectNum[turretRank - 2];
+        }
+        else if (turretInfo.upgradeList[turretRank - 2] == TurretUpgradeType.DeflectNum)
+        {
+            bulletDeflectNum = (int)turretInfo.upgradeEffectNum[turretRank - 2];
+        }
+        else if (turretInfo.upgradeList[turretRank - 2] == TurretUpgradeType.Penetrate)
+        {
+            bulletPentrate = true;
         }
         else if (turretInfo.upgradeList[turretRank - 2] == TurretUpgradeType.TurretNum)
         {
@@ -244,6 +272,8 @@ public class TurretManager : MonoBehaviour
         bullet.autoTarget = bulletAuto;
         bullet.penetrate = bulletPentrate;
         bullet.deflectNum = bulletDeflectNum;
+        bullet.explosionRadius = explosionRadius;
         bullet.explosionDamamge = bulletExplodeDamage;
+        bullet.bulletElement = element;
     }
 }
