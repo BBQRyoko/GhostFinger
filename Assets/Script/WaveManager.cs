@@ -40,6 +40,7 @@ public class WaveManager : MonoBehaviour
     }
     void Update()
     {
+        curGhosts = GameObject.FindObjectsOfType<GhostManager>().ToList();
         RoundSpawnManager();
         GameScaleManager();
     }
@@ -88,7 +89,7 @@ public class WaveManager : MonoBehaviour
             if (roundCounter > 0f)
             {
                 enemySpawnCounter = 3f;
-                curGhosts = GameObject.FindObjectsOfType<GhostManager>().ToList();
+                //curGhosts = GameObject.FindObjectsOfType<GhostManager>().ToList();
                 if (curGhosts.Count >= mapRounds.roundsInfo[roundNum].minEnemyNum && curGhosts.Count <= mapRounds.roundsInfo[roundNum].maxEnemyNum)
                 {
                     GhostSpawn(mapRounds.roundsInfo[roundNum].autoSpawn,false);
@@ -113,13 +114,14 @@ public class WaveManager : MonoBehaviour
     void GhostSpawn(int spawnNum, bool isRandom)
     {
         List<GhostManager> tempGhosts = new List<GhostManager>();
-        //¸Ä¹ÖÎïÉú³ÉÊýÁ¿µÄµØ·½
+        //ï¿½Ä¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÄµØ·ï¿½
         if (mapRounds.roundsInfo[roundNum].enemies.Length > 1)
         {
             for (int i = 0; i < spawnNum; i++)
             {
                 int randomRange = Random.Range(0, mapRounds.roundsInfo[roundNum].enemies.Length);
-                GhostManager spawnedGhost = enemyPool.ghostPrefabPool.Get();
+                //GhostManager spawnedGhost = enemyPool.ghostPrefabPool.Get();
+                GhostManager spawnedGhost = Instantiate(enemyPool.ghostPrefab, transform);
                 spawnedGhost.gameObject.SetActive(false);
                 spawnedGhost.EnemyInfoImport(mapRounds.roundsInfo[roundNum].enemies[randomRange]); 
                 tempGhosts.Add(spawnedGhost);
@@ -129,12 +131,14 @@ public class WaveManager : MonoBehaviour
         {
             for (int i = 0; i < spawnNum; i++)
             {
-                GhostManager spawnedGhost = enemyPool.ghostPrefabPool.Get();
+                //GhostManager spawnedGhost = enemyPool.ghostPrefabPool.Get();
+                GhostManager spawnedGhost = Instantiate(enemyPool.ghostPrefab, transform);
                 spawnedGhost.gameObject.SetActive(false);
                 spawnedGhost.EnemyInfoImport(mapRounds.roundsInfo[roundNum].enemies[0]);
                 tempGhosts.Add(spawnedGhost);
             }
         }
+
         if (isRandom)
         {
             float radiansOfSeparation = (Mathf.PI * 2) / tempGhosts.Count;
@@ -145,7 +149,6 @@ public class WaveManager : MonoBehaviour
                 float x = Mathf.Sin(radiansOfSeparation * i + randomRadian) * (radius + Random.Range(-0.75f, 0.75f));
                 if (x == 0) x = 0.01f;
                 float y = Mathf.Cos(radiansOfSeparation * i + randomRadian) * (radius + Random.Range(-0.75f, 0.75f));
-
                 tempGhosts[i].GetComponent<Transform>().position = new Vector3(x, y, 0);
                 tempGhosts[i].gameObject.SetActive(true);
             }

@@ -124,7 +124,8 @@ public class GhostManager : MonoBehaviour
     public void GhostRemove() 
     {
         waveManager.curGhosts.Remove(this);
-        enemyPool.ghostPrefabPool.Release(this);
+        //enemyPool.ghostPrefabPool.Release(this);
+        Destroy(this.gameObject);
         ghostHp = enemyInfo.enemyHealth;
         gameObject.transform.localScale = new Vector3(0.12f, 0.12f, 0.12f);
         isFreezed = false;

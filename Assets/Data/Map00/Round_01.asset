@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Round_01
   m_EditorClassIdentifier: 
   autoSpawn: 2
-  minEnemyNum: 5
+  minEnemyNum: 4
   maxEnemyNum: 6
   enemies:
   - {fileID: 11400000, guid: 48a14ba5ce5181d488c4f2acf9ac433e, type: 2}

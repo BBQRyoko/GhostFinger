@@ -142,7 +142,7 @@ public class TurretManager : MonoBehaviour
                 Vector2 dir = new Vector2(curTarget.transform.position.x - transform.position.x, curTarget.transform.position.y - transform.position.y);
                 dir.Normalize();
                 bullet.transform.right = dir;
-                bullet.GetComponent<BulletManager>().SetSpeed(dir);
+                bullet.GetComponent<BulletManager>().SetSpeed(bullet.transform.right);
             }
             else
             {

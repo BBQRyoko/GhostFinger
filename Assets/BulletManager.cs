@@ -9,6 +9,8 @@ public class BulletManager : MonoBehaviour
     public float bulletDamage = 1f;
     public float explosionDamamge = 5f;
     [Range(1,2)] public float explosionRadius = 1f;
+    [SerializeField] Vector3 shootDir;
+    [SerializeField] Vector3 ve;
     public float speed = 2f;
     public bool canExplode, autoTarget, penetrate;
     public int deflectNum;
@@ -29,9 +31,15 @@ public class BulletManager : MonoBehaviour
         {
             this.GetComponent<Collider2D>().isTrigger = false;
         }
+        ve = rigidbody.velocity;
+        if (Mathf.Abs(rigidbody.velocity.x) <= 0.005f || Mathf.Abs(rigidbody.velocity.y) <= 0.005f ) 
+        {
+            rigidbody.velocity = shootDir * speed;
+        }
     }
     public void SetSpeed(Vector2 dir)
     {
+        shootDir = dir;
         rigidbody.velocity = dir * speed;
     }
     private void OnTriggerEnter2D(Collider2D collision)

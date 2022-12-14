@@ -333,6 +333,14 @@ public class PlayerManager : MonoBehaviour
             fingerObject.transform.right = fingerDirection;
         }
     }
+    public void RecycleExp() 
+    {
+        var exps = GameObject.FindGameObjectsWithTag("Exp");
+        foreach (GameObject exp in exps) 
+        {
+            gameManager.GetComponent<ExpPool>().expPrefabPool.Release(exp);
+        }
+    }
     public void GameRestart() 
     {
         Time.timeScale = 1;
@@ -345,6 +353,10 @@ public class PlayerManager : MonoBehaviour
         passiveUpgradeProgress.Clear();
         turretsUpgradeList.Clear();
         turretsUpgradeList.Add(starterTurret);
+        tempTurretsSlots[1].SetActive(false);
+        tempTurretsSlots[2].SetActive(false);
+        tempTurretsSlots[3].SetActive(false);
+        RecycleExp();
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {

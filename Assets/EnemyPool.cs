@@ -5,18 +5,34 @@ using UnityEngine.Pool;
 
 public class EnemyPool : MonoBehaviour
 {
-    [SerializeField] GhostManager ghostPrefab;
+    public GhostManager ghostPrefab;
     public ObjectPool<GhostManager> ghostPrefabPool;
     [SerializeField] int defaultEnemySize = 50;
-    [SerializeField] int maxPoolSize = 500;
+    [SerializeField] int maxPoolSize = 50;
+    [SerializeField] int Active;
+    [SerializeField] int InActive;
+    [SerializeField] int All;
+
+
     private void Awake()
     {
         ghostPrefabPool = new ObjectPool<GhostManager>(OnCreatePoolItem, OnGetPoolItem, OnReleasePoolItem, OnDestroyPoolItem, true, defaultEnemySize, maxPoolSize);
+        //for (int i = 0; i < defaultEnemySize; i++) 
+        //{
+        //    var enemy = ghostPrefabPool.Get();
+        //    enemy.gameObject.SetActive(false);
+        //}
+    }
+
+    private void Update()
+    {
+        Active = ghostPrefabPool.CountActive;
+        InActive = ghostPrefabPool.CountInactive;
+        All = ghostPrefabPool.CountAll;
     }
     GhostManager OnCreatePoolItem()
     {
         var enemy = Instantiate(ghostPrefab, transform);
-        enemy.gameObject.SetActive(false);
         return enemy;
     }
     void OnGetPoolItem(GhostManager enemy)
